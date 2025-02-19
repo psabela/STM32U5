@@ -1,0 +1,259 @@
+/*
+ * tim_assembly.s
+ *
+ *  Created on: Dec 18, 2024
+ *      Author: peter
+ */
+
+.syntax unified
+
+.text
+
+.global TIM2_Set_PSC_Value
+.global TIM2_Set_ARR_Value
+.global TIM2_Clear_UIF_Flag
+.global TIM2_Set_CCnS_To_Channel_Output
+.global TIM2_Set_DITHEN_False
+.global TIM2_Set_CCRn_WaveGen_Value
+.global TIM2_Clear_CC1IF_Flag
+.global TIM2_Set_DIR_UpCounter
+.global TIM2_Set_OCnM_To_Toggle_Mode
+.global TIM2_Set_CC1P_Polarity_ActiveHigh
+.global TIM2_Set_CCnE_Output_Enable_To_GPIO
+.global TIM2_Set_CEN_Counter_Enable
+.global TIM2_Set_UIF_Update_Interrupt_Enable
+.global	TIM2_Set_CC1IE_Update_Interrupt_Enable
+.global TIM2_Get_SR_Status
+.global TIM2_Set_MMS_Update_Trigger_Output
+
+.thumb_func
+
+.equ	TIM2_BASE_OFFSET,	0x40000000
+.equ	TIMx_CR1_OFFSET,	0x00
+.equ	TIMx_CR2_OFFSET,	0x04
+.equ	TIMx_SMCR_OFFSET,	0x08
+.equ	TIMx_DIER_OFFSET,	0x0C
+.equ	TIMx_SR_OFFSET,		0x10
+.equ	TIMx_EGR_OFFSET,	0x14
+.equ	TIMx_CCMR1_OFFSET,	0x18
+.equ	TIMx_CCMR2_OFFSET,	0x1C
+.equ	TIMx_CCER_OFFSET,	0x20
+.equ	TIMx_CNT_OFFSET,	0x24
+.equ	TIMx_PSC_OFFSET,	0x28
+.equ	TIMx_ARR_OFFSET,	0x2C
+.equ	TIMx_CCR1_OFFSET,	0x34
+.equ	TIMx_CCR2_OFFSET,	0x38
+.equ	TIMx_CCR3_OFFSET,	0x3C
+.equ	TIMx_CCR4_OFFSET,	0x40
+.equ	TIMx_ECR_OFFSET,	0x58
+.equ	TIMx_TISEL_OFFSET,	0x5C
+.equ	TIMx_AF1_OFFSET,	0x60
+.equ	TIMx_AF2_OFFSET,	0x64
+.equ	TIMx_DCR_OFFSET,	0x3DC
+.equ	TIMx_DMAR_OFFSET,	0x3E0
+.equ	PRESCALER, 0xF9F
+.equ	ARRCOUNTTO, 0x3E7
+.equ	CCRCOUNTTO, 0x1F3//0x12C
+
+TIM2_Set_PSC_Value:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_PSC_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	LDR		R2, =PRESCALER
+	ORRS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+//Auto-Reload Register (TIMx_ARR)
+TIM2_Set_ARR_Value:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_ARR_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x0
+	ANDS	R0, R2
+	LDR		R2, =ARRCOUNTTO
+	ORRS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Clear_UIF_Flag:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_SR_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	MVNS	R2, R2
+	ANDS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_CCnS_To_Channel_Output:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CCMR1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x3
+	LSLS	R2, #0
+	MVNS	R2, R2
+	ANDS	R0, R2		//clear bits 0,1
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_DITHEN_False:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CR1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	LSLS	R2, #12
+	MVNS	R2, R2
+	ANDS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_CCRn_WaveGen_Value:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CCR1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x0
+	ANDS	R0, R2
+	LDR		R2, =CCRCOUNTTO
+	ORRS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Clear_CC1IF_Flag:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_SR_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	LSLS	R2, #1
+	MVNS	R2, R2
+	ANDS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+
+TIM2_Set_DIR_UpCounter:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CR1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	LSLS	R2, #4
+	MVNS	R2, R2
+	ANDS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_OCnM_To_Toggle_Mode:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CCMR1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R2, #16
+	MVNS	R2, R2
+	ANDS	R0, R2 //clear bit 16
+	MOVS  	R2, #7
+	LSLS	R2, #4
+	MVNS	R2, R2
+	ANDS 	R0, R2 //clear bits 4-6
+	MOVS	R2, #3
+	LSLS	R2, #4
+	ORRS	R0, R2 //set bits 4, 5
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_CC1P_Polarity_ActiveHigh:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CCER_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	LSLS	R2, #1
+	MVNS	R2, R2
+	ANDS	R0, R2 //clear bit 1
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_CCnE_Output_Enable_To_GPIO:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CCER_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x1
+	ORRS	R0, R2 //set bit 1
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_CEN_Counter_Enable:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CR1_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	ORRS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_MMS_Update_Trigger_Output:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_CR2_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x7
+	LSLS	R2, #4
+	MVNS	R2, R2
+	ANDS	R0, R2
+	MOVS	R2, 0x2
+	LSLS	R2, #4
+	ORRS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Set_UIF_Update_Interrupt_Enable:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_DIER_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	ORRS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+//Bit 1 CC1IE: Capture/Compare 1 interrupt enable
+TIM2_Set_CC1IE_Update_Interrupt_Enable:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_DIER_OFFSET
+	ADDS	R1, R2
+	LDR		R0, [R1]
+	MOVS	R2, 0x01
+	LSLS	R2, #1
+	ORRS	R0, R2
+	STR		R0, [R1]
+	BX LR
+
+TIM2_Get_SR_Status:
+	LDR		R1, =TIM2_BASE_OFFSET
+	LDR		R2, =TIMx_SR_OFFSET
+	ADDS	R1, R2
+	LDRH	R0, [R1]
+	BX LR
+
+
+
+
+
+
+
+
+
+
+
+
+
