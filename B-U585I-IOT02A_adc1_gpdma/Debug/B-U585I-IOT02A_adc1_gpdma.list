@@ -1,0 +1,3298 @@
+
+B-U585I-IOT02A_adc1_gpdma.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000258  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00000c58  08000258  08000258  00001258  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .init_array   00000004  08000eb0  08000eb0  00001eb0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .fini_array   00000004  08000eb4  08000eb4  00001eb4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  4 .bss          000000b8  20000000  08000eb8  00002000  2**2
+                  ALLOC
+  5 ._user_heap_stack 00000600  200000b8  08000eb8  000020b8  2**0
+                  ALLOC
+  6 .ARM.attributes 00000030  00000000  00000000  00001eb8  2**0
+                  CONTENTS, READONLY
+  7 .debug_line   00000d79  00000000  00000000  00001ee8  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  8 .debug_line_str 000000ea  00000000  00000000  00002c61  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  9 .debug_info   00000661  00000000  00000000  00002d4b  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 10 .debug_abbrev 000001fb  00000000  00000000  000033ac  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 11 .debug_aranges 00000140  00000000  00000000  000035a8  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 12 .debug_str    00008014  00000000  00000000  000036e8  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_rnglists 00000041  00000000  00000000  0000b6fc  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_macro  00001b6b  00000000  00000000  0000b73d  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .comment      00000043  00000000  00000000  0000d2a8  2**0
+                  CONTENTS, READONLY
+ 16 .debug_frame  000000bc  00000000  00000000  0000d2ec  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000258 <__do_global_dtors_aux>:
+ 8000258:	b510      	push	{r4, lr}
+ 800025a:	4c05      	ldr	r4, [pc, #20]	@ (8000270 <__do_global_dtors_aux+0x18>)
+ 800025c:	7823      	ldrb	r3, [r4, #0]
+ 800025e:	b933      	cbnz	r3, 800026e <__do_global_dtors_aux+0x16>
+ 8000260:	4b04      	ldr	r3, [pc, #16]	@ (8000274 <__do_global_dtors_aux+0x1c>)
+ 8000262:	b113      	cbz	r3, 800026a <__do_global_dtors_aux+0x12>
+ 8000264:	4804      	ldr	r0, [pc, #16]	@ (8000278 <__do_global_dtors_aux+0x20>)
+ 8000266:	f3af 8000 	nop.w
+ 800026a:	2301      	movs	r3, #1
+ 800026c:	7023      	strb	r3, [r4, #0]
+ 800026e:	bd10      	pop	{r4, pc}
+ 8000270:	20000000 	.word	0x20000000
+ 8000274:	00000000 	.word	0x00000000
+ 8000278:	08000e98 	.word	0x08000e98
+
+0800027c <frame_dummy>:
+ 800027c:	b508      	push	{r3, lr}
+ 800027e:	4b03      	ldr	r3, [pc, #12]	@ (800028c <frame_dummy+0x10>)
+ 8000280:	b11b      	cbz	r3, 800028a <frame_dummy+0xe>
+ 8000282:	4903      	ldr	r1, [pc, #12]	@ (8000290 <frame_dummy+0x14>)
+ 8000284:	4803      	ldr	r0, [pc, #12]	@ (8000294 <frame_dummy+0x18>)
+ 8000286:	f3af 8000 	nop.w
+ 800028a:	bd08      	pop	{r3, pc}
+ 800028c:	00000000 	.word	0x00000000
+ 8000290:	20000004 	.word	0x20000004
+ 8000294:	08000e98 	.word	0x08000e98
+
+08000298 <ADC1_DEEPPWD_Clear>:
+*/
+
+
+//1.First exit Deep-power-down mode by clearing the DEEPPWD bit in the ADC_CR register.
+ADC1_DEEPPWD_Clear:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 8000298:	49ee      	ldr	r1, [pc, #952]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_CR_OFFSET
+ 800029a:	f04f 0208 	mov.w	r2, #8
+	ADDS 	R1, R2
+ 800029e:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]
+ 80002a0:	6808      	ldr	r0, [r1, #0]
+	MOVS 	R2, 0x01
+ 80002a2:	2201      	movs	r2, #1
+	LSLS 	R2, #29
+ 80002a4:	0752      	lsls	r2, r2, #29
+	MVNS	R2, R2
+ 80002a6:	43d2      	mvns	r2, r2
+	ANDS 	R0, R2
+ 80002a8:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 80002aa:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80002ac:	4770      	bx	lr
+
+080002ae <ADC1_CR_ADVREGEN_Set>:
+//2.Then, enable the ADC internal voltage regulator by setting the ADVREGEN bit in the
+//ADC_CR register. The software must wait for the startup time of the ADC voltage
+//regulator (TADCVREG_STUP) before launching a calibration or enabling the ADC. This
+//can be done by software by polling the LDORDY bit of the ADC_ISR register.
+ADC1_CR_ADVREGEN_Set:
+	LDR	 R1, =ADC_BASE_ADDR
+ 80002ae:	49e9      	ldr	r1, [pc, #932]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CR_OFFSET
+ 80002b0:	f04f 0208 	mov.w	r2, #8
+	ADDS R1, R2
+ 80002b4:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 80002b6:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80002b8:	2201      	movs	r2, #1
+	LSLS R3, R2, #28
+ 80002ba:	0713      	lsls	r3, r2, #28
+	ORRS R0, R3 //set bit 28 ADVREGEN
+ 80002bc:	4318      	orrs	r0, r3
+	STR	 R0, [R1]
+ 80002be:	6008      	str	r0, [r1, #0]
+	BX   LR
+ 80002c0:	4770      	bx	lr
+
+080002c2 <ADC1_ISR_LDORDY_Get>:
+
+ADC1_ISR_LDORDY_Get:
+	LDR		R1, =ADC_BASE_ADDR
+ 80002c2:	49e4      	ldr	r1, [pc, #912]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR		R2, =ADC_ISR_OFFSET
+ 80002c4:	f04f 0200 	mov.w	r2, #0
+	ADDS	R1,	R2
+ 80002c8:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80002ca:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80002cc:	2201      	movs	r2, #1
+	LSLS	R2, #12
+ 80002ce:	0312      	lsls	r2, r2, #12
+	ANDS	R0, R2
+ 80002d0:	4010      	ands	r0, r2
+	BX LR
+ 80002d2:	4770      	bx	lr
+
+080002d4 <ADC1_ADEN_Clear>:
+
+//3.Make sure ADEN = 0.
+ADC1_ADEN_Clear:
+	BX	LR
+ 80002d4:	4770      	bx	lr
+
+080002d6 <ADC1_CR_ADCALLIN_Set>:
+•Set ADCALLIN in ADC_CR before launching a calibration that runs the linearity
+calibration simultaneously with the offset calibration or
+•Clear ADCALLIN in ADC_CR before launching a calibration that does not run the
+linearity calibration but only the offset calibration.*/
+ADC1_CR_ADCALLIN_Set:
+	LDR	 R1, =ADC_BASE_ADDR
+ 80002d6:	49df      	ldr	r1, [pc, #892]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CR_OFFSET
+ 80002d8:	f04f 0208 	mov.w	r2, #8
+	ADDS R1, R2
+ 80002dc:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 80002de:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80002e0:	2201      	movs	r2, #1
+	LSLS R2, #16
+ 80002e2:	0412      	lsls	r2, r2, #16
+	ORRS R0, R2
+ 80002e4:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 80002e6:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 80002e8:	4770      	bx	lr
+
+080002ea <ADC1_CALFACT_CAPTURE_COEF_Clear>:
+
+//4.Make sure CAPTURE_COEF and LATCH_COEF in ADC_CALFACT are cleared in the ADC_CALFAC register.
+//Calibration factor capture enable bit
+ADC1_CALFACT_CAPTURE_COEF_Clear:
+	LDR	 R1, =ADC_BASE_ADDR
+ 80002ea:	49da      	ldr	r1, [pc, #872]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CALFACT_OFFSET
+ 80002ec:	f04f 02c4 	mov.w	r2, #196	@ 0xc4
+	ADDS R1, R2
+ 80002f0:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 80002f2:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80002f4:	2201      	movs	r2, #1
+	LSLS R2, #25
+ 80002f6:	0652      	lsls	r2, r2, #25
+	MVNS R2, R2
+ 80002f8:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 80002fa:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 80002fc:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 80002fe:	4770      	bx	lr
+
+08000300 <ADC1_CALFACT_LATCH_COEF_Clear>:
+
+//Calibration factor latch enable bit
+ADC1_CALFACT_LATCH_COEF_Clear:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000300:	49d4      	ldr	r1, [pc, #848]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CALFACT_OFFSET
+ 8000302:	f04f 02c4 	mov.w	r2, #196	@ 0xc4
+	ADDS R1, R2
+ 8000306:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 8000308:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 800030a:	2201      	movs	r2, #1
+	LSLS R2, #24
+ 800030c:	0612      	lsls	r2, r2, #24
+	MVNS R2, R2
+ 800030e:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 8000310:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 8000312:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 8000314:	4770      	bx	lr
+
+08000316 <ADC1_CR_ADCAL_Set>:
+
+ADC1_CR_ADCAL_Set:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000316:	49cf      	ldr	r1, [pc, #828]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CR_OFFSET
+ 8000318:	f04f 0208 	mov.w	r2, #8
+	ADDS R1, R2
+ 800031c:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 800031e:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000320:	2201      	movs	r2, #1
+	LSLS R2, #31
+ 8000322:	07d2      	lsls	r2, r2, #31
+	ORRS R0, R2
+ 8000324:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 8000326:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 8000328:	4770      	bx	lr
+
+0800032a <ADC1_CR_ADCAL_Get>:
+
+ADC1_CR_ADCAL_Get:
+	LDR	 R1, =ADC_BASE_ADDR
+ 800032a:	49ca      	ldr	r1, [pc, #808]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CR_OFFSET
+ 800032c:	f04f 0208 	mov.w	r2, #8
+	ADDS R1, R2
+ 8000330:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 8000332:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000334:	2201      	movs	r2, #1
+	LSLS R2, #31
+ 8000336:	07d2      	lsls	r2, r2, #31
+	ANDS R0, R2
+ 8000338:	4010      	ands	r0, r2
+	BX	LR
+ 800033a:	4770      	bx	lr
+
+0800033c <ADC1_PCSEL_PCSEL_Set>:
+multiplexer does. To avoid the delay due to on analog switch control on the I/O, it is
+necessary to preselect the input channels that are selected through the SQRx and JSQRx.
+The selection is based on the VINP[i] of each ADC input. For example, if the ADC converts
+ADC_IN1, the PCSEL1 bit must also be set in ADC_PCSEL.*/
+ADC1_PCSEL_PCSEL_Set:
+	LDR	 R1, =ADC_BASE_ADDR
+ 800033c:	49c5      	ldr	r1, [pc, #788]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_PCSET_OFFSET
+ 800033e:	f04f 021c 	mov.w	r2, #28
+	ADDS R1, R2
+ 8000342:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 8000344:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x1
+ 8000346:	2201      	movs	r2, #1
+	LSLS R2, R0
+ 8000348:	4082      	lsls	r2, r0
+	ORRS R3, R2
+ 800034a:	4313      	orrs	r3, r2
+	STR	 R3, [R1]
+ 800034c:	600b      	str	r3, [r1, #0]
+	BX LR
+ 800034e:	4770      	bx	lr
+
+08000350 <ADC1_DIFSEL_DIFSEL_SingleEnded>:
+
+//Single-ended and differential input channels
+//ADC channels can be configured either as single-ended input or as differential input. This is
+//done by writing DIFSEL[19:0] bits in the ADC_DIFSEL register.
+ADC1_DIFSEL_DIFSEL_SingleEnded:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000350:	49c0      	ldr	r1, [pc, #768]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_DIFSEL_OFFSET
+ 8000352:	f04f 02c0 	mov.w	r2, #192	@ 0xc0
+	ADDS R1, R2
+ 8000356:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 8000358:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x1
+ 800035a:	2201      	movs	r2, #1
+	LSLS R2, R0
+ 800035c:	4082      	lsls	r2, r0
+	MVNS R2, R2
+ 800035e:	43d2      	mvns	r2, r2
+	ANDS R3, R2  //clear bits
+ 8000360:	4013      	ands	r3, r2
+	STR	 R3, [R1]
+ 8000362:	600b      	str	r3, [r1, #0]
+	BX LR
+ 8000364:	4770      	bx	lr
+
+08000366 <ADC1_SQR1_SQ1>:
+//A regular group is composed of up to 16 conversions. The regular channels and their
+//order in the conversion sequence must be selected in the ADC_SQRy registers. The
+//total number of conversions in the regular group must be written in the L[3:0] bits in the
+//ADC_SQR1 register.
+ADC1_SQR1_SQ1:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000366:	49bb      	ldr	r1, [pc, #748]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SQR1_OFFSET
+ 8000368:	f04f 0230 	mov.w	r2, #48	@ 0x30
+	ADDS R1, R2
+ 800036c:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 800036e:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x1
+ 8000370:	2201      	movs	r2, #1
+	LSLS R2, #4
+ 8000372:	0112      	lsls	r2, r2, #4
+	MOVS R4, 0xf
+ 8000374:	240f      	movs	r4, #15
+	ORRS R2, R4
+ 8000376:	4322      	orrs	r2, r4
+	LSLS R2, #6
+ 8000378:	0192      	lsls	r2, r2, #6
+	MVNS R2, R2
+ 800037a:	43d2      	mvns	r2, r2
+	ANDS R3, R2  //clear bits
+ 800037c:	4013      	ands	r3, r2
+	LSLS R0, #6
+ 800037e:	0180      	lsls	r0, r0, #6
+	ORRS R3, R0
+ 8000380:	4303      	orrs	r3, r0
+	STR	 R3, [R1]
+ 8000382:	600b      	str	r3, [r1, #0]
+	BX LR
+ 8000384:	4770      	bx	lr
+
+08000386 <ADC1_SQR1_SQ2>:
+ADC1_SQR1_SQ2:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000386:	49b3      	ldr	r1, [pc, #716]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SQR1_OFFSET
+ 8000388:	f04f 0230 	mov.w	r2, #48	@ 0x30
+	ADDS R1, R2
+ 800038c:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 800038e:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x1
+ 8000390:	2201      	movs	r2, #1
+	LSLS R2, #4
+ 8000392:	0112      	lsls	r2, r2, #4
+	MOVS R4, 0xf
+ 8000394:	240f      	movs	r4, #15
+	ORRS R2, R4
+ 8000396:	4322      	orrs	r2, r4
+	LSLS R2, #12
+ 8000398:	0312      	lsls	r2, r2, #12
+	MVNS R2, R2
+ 800039a:	43d2      	mvns	r2, r2
+	ANDS R3, R2  //clear bits
+ 800039c:	4013      	ands	r3, r2
+	LSLS R0, #12
+ 800039e:	0300      	lsls	r0, r0, #12
+	ORRS R3, R0
+ 80003a0:	4303      	orrs	r3, r0
+	STR	 R3, [R1]
+ 80003a2:	600b      	str	r3, [r1, #0]
+	BX LR
+ 80003a4:	4770      	bx	lr
+
+080003a6 <ADC1_SQR1_SQ3>:
+ADC1_SQR1_SQ3:
+	LDR	 R1, =ADC_BASE_ADDR
+ 80003a6:	49ab      	ldr	r1, [pc, #684]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SQR1_OFFSET
+ 80003a8:	f04f 0230 	mov.w	r2, #48	@ 0x30
+	ADDS R1, R2
+ 80003ac:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 80003ae:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x1
+ 80003b0:	2201      	movs	r2, #1
+	LSLS R2, #4
+ 80003b2:	0112      	lsls	r2, r2, #4
+	MOVS R4, 0xf
+ 80003b4:	240f      	movs	r4, #15
+	ORRS R2, R4
+ 80003b6:	4322      	orrs	r2, r4
+	LSLS R2, #18
+ 80003b8:	0492      	lsls	r2, r2, #18
+	MVNS R2, R2
+ 80003ba:	43d2      	mvns	r2, r2
+	ANDS R3, R2  //clear bits
+ 80003bc:	4013      	ands	r3, r2
+	LSLS R0, #18
+ 80003be:	0480      	lsls	r0, r0, #18
+	ORRS R3, R0
+ 80003c0:	4303      	orrs	r3, r0
+	STR	 R3, [R1]
+ 80003c2:	600b      	str	r3, [r1, #0]
+	BX LR
+ 80003c4:	4770      	bx	lr
+
+080003c6 <ADC1_SQR1_SQ4>:
+ADC1_SQR1_SQ4:
+	LDR	 R1, =ADC_BASE_ADDR
+ 80003c6:	49a3      	ldr	r1, [pc, #652]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SQR1_OFFSET
+ 80003c8:	f04f 0230 	mov.w	r2, #48	@ 0x30
+	ADDS R1, R2
+ 80003cc:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 80003ce:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x1
+ 80003d0:	2201      	movs	r2, #1
+	LSLS R2, #4
+ 80003d2:	0112      	lsls	r2, r2, #4
+	MOVS R4, 0xf
+ 80003d4:	240f      	movs	r4, #15
+	ORRS R2, R4
+ 80003d6:	4322      	orrs	r2, r4
+	LSLS R2, #24
+ 80003d8:	0612      	lsls	r2, r2, #24
+	MVNS R2, R2
+ 80003da:	43d2      	mvns	r2, r2
+	ANDS R3, R2  //clear bits
+ 80003dc:	4013      	ands	r3, r2
+	LSLS R0, #24
+ 80003de:	0600      	lsls	r0, r0, #24
+	ORRS R3, R0
+ 80003e0:	4303      	orrs	r3, r0
+	STR	 R3, [R1]
+ 80003e2:	600b      	str	r3, [r1, #0]
+	BX LR
+ 80003e4:	4770      	bx	lr
+
+080003e6 <ADC1_SQR1_L>:
+
+ADC1_SQR1_L:
+	LDR	 R1, =ADC_BASE_ADDR
+ 80003e6:	499b      	ldr	r1, [pc, #620]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SQR1_OFFSET
+ 80003e8:	f04f 0230 	mov.w	r2, #48	@ 0x30
+	ADDS R1, R2
+ 80003ec:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 80003ee:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0xf
+ 80003f0:	220f      	movs	r2, #15
+	MVNS R2, R2
+ 80003f2:	43d2      	mvns	r2, r2
+	ANDS R3, R2  //clear bits
+ 80003f4:	4013      	ands	r3, r2
+	ORRS R3, R0	 //set from param value
+ 80003f6:	4303      	orrs	r3, r0
+	STR	 R3, [R1]
+ 80003f8:	600b      	str	r3, [r1, #0]
+	BX LR
+ 80003fa:	4770      	bx	lr
+
+080003fc <ADC1_SMPR2_SMP18_5CLK>:
+
+//Channel-wise programmable sampling time (SMPR1, SMPR2)
+ADC1_SMPR2_SMP18_5CLK:
+	LDR	 R1, =ADC_BASE_ADDR
+ 80003fc:	4995      	ldr	r1, [pc, #596]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SMPR2_OFFSET
+ 80003fe:	f04f 0218 	mov.w	r2, #24
+	ADDS R1, R2
+ 8000402:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 8000404:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x7
+ 8000406:	2207      	movs	r2, #7
+	MVNS R2, R2
+ 8000408:	43d2      	mvns	r2, r2
+	LSLS R2, #24
+ 800040a:	0612      	lsls	r2, r2, #24
+	ANDS R3, R2  //clear bits
+ 800040c:	4013      	ands	r3, r2
+	STR	 R3, [R1]
+ 800040e:	600b      	str	r3, [r1, #0]
+	BX LR
+ 8000410:	4770      	bx	lr
+
+08000412 <ADC1_SMPR2_SMP19_5CLK>:
+
+ADC1_SMPR2_SMP19_5CLK:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000412:	4990      	ldr	r1, [pc, #576]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SMPR2_OFFSET
+ 8000414:	f04f 0218 	mov.w	r2, #24
+	ADDS R1, R2
+ 8000418:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 800041a:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x7
+ 800041c:	2207      	movs	r2, #7
+	MVNS R2, R2
+ 800041e:	43d2      	mvns	r2, r2
+	LSLS R2, #27
+ 8000420:	06d2      	lsls	r2, r2, #27
+	ANDS R3, R2  //clear bits
+ 8000422:	4013      	ands	r3, r2
+	STR	 R3, [R1]
+ 8000424:	600b      	str	r3, [r1, #0]
+	BX LR
+ 8000426:	4770      	bx	lr
+
+08000428 <ADC1_SMPR2_SMP18_814CLK>:
+
+ADC1_SMPR2_SMP18_814CLK:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000428:	498a      	ldr	r1, [pc, #552]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SMPR2_OFFSET
+ 800042a:	f04f 0218 	mov.w	r2, #24
+	ADDS R1, R2
+ 800042e:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 8000430:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x7
+ 8000432:	2207      	movs	r2, #7
+	LSLS R2, #24
+ 8000434:	0612      	lsls	r2, r2, #24
+	ORRS R3, R2  //clear bits
+ 8000436:	4313      	orrs	r3, r2
+	STR	 R3, [R1]
+ 8000438:	600b      	str	r3, [r1, #0]
+	BX LR
+ 800043a:	4770      	bx	lr
+
+0800043c <ADC1_SMPR2_SMP19_814CLK>:
+
+ADC1_SMPR2_SMP19_814CLK:
+	LDR	 R1, =ADC_BASE_ADDR
+ 800043c:	4985      	ldr	r1, [pc, #532]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SMPR2_OFFSET
+ 800043e:	f04f 0218 	mov.w	r2, #24
+	ADDS R1, R2
+ 8000442:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 8000444:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x7
+ 8000446:	2207      	movs	r2, #7
+	LSLS R2, #27
+ 8000448:	06d2      	lsls	r2, r2, #27
+	ORRS R3, R2
+ 800044a:	4313      	orrs	r3, r2
+	STR	 R3, [R1]
+ 800044c:	600b      	str	r3, [r1, #0]
+	BX LR
+ 800044e:	4770      	bx	lr
+
+08000450 <ADC1_SMPR2_SMP19_12CLK>:
+
+
+ADC1_SMPR2_SMP19_12CLK:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000450:	4980      	ldr	r1, [pc, #512]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SMPR2_OFFSET
+ 8000452:	f04f 0218 	mov.w	r2, #24
+	ADDS R1, R2
+ 8000456:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 8000458:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x7
+ 800045a:	2207      	movs	r2, #7
+	MVNS R2, R2
+ 800045c:	43d2      	mvns	r2, r2
+	LSLS R2, #27
+ 800045e:	06d2      	lsls	r2, r2, #27
+	ANDS R3, R2  //clear bits
+ 8000460:	4013      	ands	r3, r2
+	MOVS R2, 0x2
+ 8000462:	2202      	movs	r2, #2
+	LSLS R2, #27
+ 8000464:	06d2      	lsls	r2, r2, #27
+	ORRS R3, R2
+ 8000466:	4313      	orrs	r3, r2
+	STR	 R3, [R1]
+ 8000468:	600b      	str	r3, [r1, #0]
+	BX LR
+ 800046a:	4770      	bx	lr
+
+0800046c <ADC1_SMPR2_SMP19_20CLK>:
+
+//011: 20 ADC clock cycles
+ADC1_SMPR2_SMP19_20CLK:
+	LDR	 R1, =ADC_BASE_ADDR
+ 800046c:	4979      	ldr	r1, [pc, #484]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_SMPR2_OFFSET
+ 800046e:	f04f 0218 	mov.w	r2, #24
+	ADDS R1, R2
+ 8000472:	1889      	adds	r1, r1, r2
+	LDR	 R3, [R1]
+ 8000474:	680b      	ldr	r3, [r1, #0]
+	MOVS R2, 0x7
+ 8000476:	2207      	movs	r2, #7
+	MVNS R2, R2
+ 8000478:	43d2      	mvns	r2, r2
+	LSLS R2, #27
+ 800047a:	06d2      	lsls	r2, r2, #27
+	ANDS R3, R2  //clear bits
+ 800047c:	4013      	ands	r3, r2
+	MOVS R2, 0x3
+ 800047e:	2203      	movs	r2, #3
+	LSLS R2, #27
+ 8000480:	06d2      	lsls	r2, r2, #27
+	ORRS R3, R2
+ 8000482:	4313      	orrs	r3, r2
+	STR	 R3, [R1]
+ 8000484:	600b      	str	r3, [r1, #0]
+	BX LR
+ 8000486:	4770      	bx	lr
+
+08000488 <ADC1_CFGR1_DMNGT_DmaOneShot>:
+
+ADC1_CFGR1_DMNGT_DmaOneShot:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 8000488:	4972      	ldr	r1, [pc, #456]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_CFGR1_OFFSET
+ 800048a:	f04f 020c 	mov.w	r2, #12
+	ADDS 	R1, R2		//R1 - address of ADC_CFGR1 register
+ 800048e:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]
+ 8000490:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x3
+ 8000492:	2203      	movs	r2, #3
+	MVNS	R2, R2
+ 8000494:	43d2      	mvns	r2, r2
+	ANDS	R0, R2	//clear bits
+ 8000496:	4010      	ands	r0, r2
+	MOVS	R2, 0x1
+ 8000498:	2201      	movs	r2, #1
+	ORRS	R0, R2
+ 800049a:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 800049c:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 800049e:	4770      	bx	lr
+
+080004a0 <ADC1_CFGR1_DMNGT_DmaCircular>:
+
+ADC1_CFGR1_DMNGT_DmaCircular:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 80004a0:	496c      	ldr	r1, [pc, #432]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_CFGR1_OFFSET
+ 80004a2:	f04f 020c 	mov.w	r2, #12
+	ADDS 	R1, R2		//R1 - address of ADC_CFGR1 register
+ 80004a6:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]
+ 80004a8:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x3
+ 80004aa:	2203      	movs	r2, #3
+	MVNS	R2, R2
+ 80004ac:	43d2      	mvns	r2, r2
+	ANDS	R0, R2	//clear bits
+ 80004ae:	4010      	ands	r0, r2
+	MOVS	R2, 0x3
+ 80004b0:	2203      	movs	r2, #3
+	ORRS	R0, R2
+ 80004b2:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80004b4:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 80004b6:	4770      	bx	lr
+
+080004b8 <ADC1_CFGR1_DMNGT_Regular>:
+
+ADC1_CFGR1_DMNGT_Regular:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 80004b8:	4966      	ldr	r1, [pc, #408]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_CFGR1_OFFSET
+ 80004ba:	f04f 020c 	mov.w	r2, #12
+	ADDS 	R1, R2		//R1 - address of ADC_CFGR1 register
+ 80004be:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]
+ 80004c0:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x3
+ 80004c2:	2203      	movs	r2, #3
+	MVNS	R2, R2
+ 80004c4:	43d2      	mvns	r2, r2
+	ANDS	R0, R2	//clear bits
+ 80004c6:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 80004c8:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 80004ca:	4770      	bx	lr
+
+080004cc <ADC1_CFGR1_EXTSEL>:
+
+//Bits 9:5 EXTSEL[4:0]: External trigger selection
+//00111:  adc_ext_trg7 => tim8_trgo
+ADC1_CFGR1_EXTSEL:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 80004cc:	4961      	ldr	r1, [pc, #388]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_CFGR1_OFFSET
+ 80004ce:	f04f 020c 	mov.w	r2, #12
+	ADDS 	R1, R2		//R1 - address of ADC_CFGR1 register
+ 80004d2:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]	//R2 - content of ADC_CFGR1 register
+ 80004d4:	6808      	ldr	r0, [r1, #0]
+	MOVS 	R2, 0x1
+ 80004d6:	2201      	movs	r2, #1
+	LSLS 	R2, #4
+ 80004d8:	0112      	lsls	r2, r2, #4
+	MOVS	R3, 0xf
+ 80004da:	230f      	movs	r3, #15
+	ORRS 	R2, R3
+ 80004dc:	431a      	orrs	r2, r3
+	LSLS	R2, #5
+ 80004de:	0152      	lsls	r2, r2, #5
+	MVNS	R2, R2
+ 80004e0:	43d2      	mvns	r2, r2
+	ANDS 	R0, R2	//clear bits
+ 80004e2:	4010      	ands	r0, r2
+	MOVS	R2, #7
+ 80004e4:	2207      	movs	r2, #7
+	LSLS	R2, #5
+ 80004e6:	0152      	lsls	r2, r2, #5
+	ORRS	R0, R2
+ 80004e8:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80004ea:	6008      	str	r0, [r1, #0]
+	BX	LR
+ 80004ec:	4770      	bx	lr
+
+080004ee <ADC1_CFGR1_EXTEN>:
+//00: Hardware trigger detection disabled (conversions can be started by software)
+//01: Hardware trigger detection on the rising edge
+//10: Hardware trigger detection on the falling edge
+//11: Hardware trigger detection on both the rising and falling edges
+ADC1_CFGR1_EXTEN:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 80004ee:	4959      	ldr	r1, [pc, #356]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_CFGR1_OFFSET
+ 80004f0:	f04f 020c 	mov.w	r2, #12
+	ADDS 	R1, R2		//R1 - address of ADC_CFGR1 register
+ 80004f4:	1889      	adds	r1, r1, r2
+	LDR	 	R2, [R1]	//R2 - content of ADC_CFGR1 register
+ 80004f6:	680a      	ldr	r2, [r1, #0]
+	MOVS 	R3, 0x3
+ 80004f8:	2303      	movs	r3, #3
+	LSLS	R3, #10
+ 80004fa:	029b      	lsls	r3, r3, #10
+	MVNS	R3, R3
+ 80004fc:	43db      	mvns	r3, r3
+	ANDS	R2, R3		//clear bits
+ 80004fe:	401a      	ands	r2, r3
+	SUBS	R3, R0, #1
+ 8000500:	1e43      	subs	r3, r0, #1
+	BEQ		RISING_EDGE
+ 8000502:	d004      	beq.n	800050e <RISING_EDGE>
+	SUBS	R3, R0, #2
+ 8000504:	1e83      	subs	r3, r0, #2
+	BEQ		FALLING_EDGE
+ 8000506:	d007      	beq.n	8000518 <FALLING_EDGE>
+	SUBS	R3, R0, #3
+ 8000508:	1ec3      	subs	r3, r0, #3
+	BEQ		RISING_AND_FALLING_EDGE
+ 800050a:	d00a      	beq.n	8000522 <RISING_AND_FALLING_EDGE>
+	BX LR
+ 800050c:	4770      	bx	lr
+
+0800050e <RISING_EDGE>:
+	RISING_EDGE:	//01
+		MOVS	R3, #1
+ 800050e:	2301      	movs	r3, #1
+		LSLS	R3, #10
+ 8000510:	029b      	lsls	r3, r3, #10
+		ORRS	R2, R3
+ 8000512:	431a      	orrs	r2, r3
+		STR		R2, [R1]
+ 8000514:	600a      	str	r2, [r1, #0]
+		BX LR
+ 8000516:	4770      	bx	lr
+
+08000518 <FALLING_EDGE>:
+	FALLING_EDGE:	//10
+		MOVS	R3, #1
+ 8000518:	2301      	movs	r3, #1
+		LSLS	R3, #11
+ 800051a:	02db      	lsls	r3, r3, #11
+		ORRS	R2, R3
+ 800051c:	431a      	orrs	r2, r3
+		STR		R2, [R1]
+ 800051e:	600a      	str	r2, [r1, #0]
+		BX LR
+ 8000520:	4770      	bx	lr
+
+08000522 <RISING_AND_FALLING_EDGE>:
+	RISING_AND_FALLING_EDGE:	//11
+		MOVS	R3, #3
+ 8000522:	2303      	movs	r3, #3
+		LSLS	R3, #10
+ 8000524:	029b      	lsls	r3, r3, #10
+		ORRS	R2, R3
+ 8000526:	431a      	orrs	r2, r3
+		STR		R2, [R1]
+ 8000528:	600a      	str	r2, [r1, #0]
+		BX LR
+ 800052a:	4770      	bx	lr
+
+0800052c <ADC1_CFGR1_OVRMOD_Overwrite>:
+
+ADC1_CFGR1_OVRMOD_Overwrite:
+	LDR	 R1, =ADC_BASE_ADDR
+ 800052c:	4949      	ldr	r1, [pc, #292]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CFGR1_OFFSET
+ 800052e:	f04f 020c 	mov.w	r2, #12
+	ADDS R1, R2
+ 8000532:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 8000534:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000536:	2201      	movs	r2, #1
+	LSLS R2, #12
+ 8000538:	0312      	lsls	r2, r2, #12
+	ORRS R0, R2
+ 800053a:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 800053c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800053e:	4770      	bx	lr
+
+08000540 <ADC1_CFGR1_CONT_Single>:
+
+ADC1_CFGR1_CONT_Single:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000540:	4944      	ldr	r1, [pc, #272]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CFGR1_OFFSET
+ 8000542:	f04f 020c 	mov.w	r2, #12
+	ADDS R1, R2
+ 8000546:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 8000548:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 800054a:	2201      	movs	r2, #1
+	LSLS R2, #13
+ 800054c:	0352      	lsls	r2, r2, #13
+	MVNS R2, R2
+ 800054e:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 8000550:	4010      	ands	r0, r2
+	STR	 R0, [R1]
+ 8000552:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000554:	4770      	bx	lr
+
+08000556 <ADC1_CFGR1_CONT_Continuos>:
+
+ADC1_CFGR1_CONT_Continuos:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000556:	493f      	ldr	r1, [pc, #252]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CFGR1_OFFSET
+ 8000558:	f04f 020c 	mov.w	r2, #12
+	ADDS R1, R2
+ 800055c:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 800055e:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000560:	2201      	movs	r2, #1
+	LSLS R2, #13
+ 8000562:	0352      	lsls	r2, r2, #13
+	ORRS R0, R2
+ 8000564:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 8000566:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000568:	4770      	bx	lr
+
+0800056a <ADC1_CFGR1_AUTDLY_Set>:
+
+ADC1_CFGR1_AUTDLY_Set:
+	LDR	 R1, =ADC_BASE_ADDR
+ 800056a:	493a      	ldr	r1, [pc, #232]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CFGR1_OFFSET
+ 800056c:	f04f 020c 	mov.w	r2, #12
+	ADDS R1, R2
+ 8000570:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 8000572:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000574:	2201      	movs	r2, #1
+	LSLS R2, #14
+ 8000576:	0392      	lsls	r2, r2, #14
+	ORRS R0, R2
+ 8000578:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 800057a:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800057c:	4770      	bx	lr
+
+0800057e <ADC1_CR_ADEN>:
+
+
+ADC1_CR_ADEN:
+	LDR	 R1, =ADC_BASE_ADDR
+ 800057e:	4935      	ldr	r1, [pc, #212]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CR_OFFSET
+ 8000580:	f04f 0208 	mov.w	r2, #8
+	ADDS R1, R2
+ 8000584:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 8000586:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000588:	2201      	movs	r2, #1
+	ORRS R0, R2
+ 800058a:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 800058c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800058e:	4770      	bx	lr
+
+08000590 <ADC1_CR_ADSTART>:
+
+
+ADC1_CR_ADSTART:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000590:	4930      	ldr	r1, [pc, #192]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_CR_OFFSET
+ 8000592:	f04f 0208 	mov.w	r2, #8
+	ADDS R1, R2
+ 8000596:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 8000598:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 800059a:	2201      	movs	r2, #1
+	LSLS R2, #2
+ 800059c:	0092      	lsls	r2, r2, #2
+	ORRS R0, R2
+ 800059e:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 80005a0:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80005a2:	4770      	bx	lr
+
+080005a4 <ADC12_CCR_VBATEN_Set>:
+/*To convert one of the internal analog channels, the corresponding analog sources must first
+be enabled by programming VBATEN, VSENSESEL, or VREFEN bits in the ADC12_CCR
+registers.*/
+.equ ADC12_CCR_ADDR,		0x42028308U
+ADC12_CCR_VBATEN_Set:
+	LDR	 R1, =ADC12_CCR_ADDR
+ 80005a4:	492c      	ldr	r1, [pc, #176]	@ (8000658 <ADC1_DR_Get+0x12>)
+	LDR	 R0, [R1]
+ 80005a6:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80005a8:	2201      	movs	r2, #1
+	LSLS R2, #24
+ 80005aa:	0612      	lsls	r2, r2, #24
+	ORRS R0, R2
+ 80005ac:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 80005ae:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80005b0:	4770      	bx	lr
+
+080005b2 <ADC12_CCR_VSENSESEL_Set>:
+
+ADC12_CCR_VSENSESEL_Set:
+	LDR	 R1, =ADC12_CCR_ADDR
+ 80005b2:	4929      	ldr	r1, [pc, #164]	@ (8000658 <ADC1_DR_Get+0x12>)
+	LDR	 R0, [R1]
+ 80005b4:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80005b6:	2201      	movs	r2, #1
+	LSLS R2, #23
+ 80005b8:	05d2      	lsls	r2, r2, #23
+	ORRS R0, R2
+ 80005ba:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 80005bc:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80005be:	4770      	bx	lr
+
+080005c0 <ADC12_CCR_VREFEN_Set>:
+
+ADC12_CCR_VREFEN_Set:
+	LDR	 R1, =ADC12_CCR_ADDR
+ 80005c0:	4925      	ldr	r1, [pc, #148]	@ (8000658 <ADC1_DR_Get+0x12>)
+	LDR	 R0, [R1]
+ 80005c2:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80005c4:	2201      	movs	r2, #1
+	LSLS R2, #22
+ 80005c6:	0592      	lsls	r2, r2, #22
+	ORRS R0, R2
+ 80005c8:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 80005ca:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80005cc:	4770      	bx	lr
+
+080005ce <ADC12_CCR_PRESC_256>:
+
+//1011: input ADC clock divided by 256
+ADC12_CCR_PRESC_256:
+	LDR		R1, =ADC12_CCR_ADDR
+ 80005ce:	4922      	ldr	r1, [pc, #136]	@ (8000658 <ADC1_DR_Get+0x12>)
+	LDR		R2, [R1] 	//R2 - content of ADC_CFGR2 register
+ 80005d0:	680a      	ldr	r2, [r1, #0]
+	MOVS	R3, 0xf
+ 80005d2:	230f      	movs	r3, #15
+	LSLS	R3, #18
+ 80005d4:	049b      	lsls	r3, r3, #18
+	MVNS	R3, R3
+ 80005d6:	43db      	mvns	r3, r3
+	ANDS	R2, R3		//clear bits
+ 80005d8:	401a      	ands	r2, r3
+	MOVS	R3, 0xb
+ 80005da:	230b      	movs	r3, #11
+	LSLS	R3, #18
+ 80005dc:	049b      	lsls	r3, r3, #18
+	ORRS    R2, R3
+ 80005de:	431a      	orrs	r2, r3
+	STR 	R2, [R1]
+ 80005e0:	600a      	str	r2, [r1, #0]
+	BX 	LR
+ 80005e2:	4770      	bx	lr
+
+080005e4 <ADC12_CCR_PRESC_4>:
+
+
+//0010: input ADC clock divided by 4
+ADC12_CCR_PRESC_4:
+	LDR		R1, =ADC12_CCR_ADDR
+ 80005e4:	491c      	ldr	r1, [pc, #112]	@ (8000658 <ADC1_DR_Get+0x12>)
+	LDR		R2, [R1] 	//R2 - content of ADC_CFGR2 register
+ 80005e6:	680a      	ldr	r2, [r1, #0]
+	MOVS	R3, 0xf
+ 80005e8:	230f      	movs	r3, #15
+	LSLS	R3, #18
+ 80005ea:	049b      	lsls	r3, r3, #18
+	MVNS	R3, R3
+ 80005ec:	43db      	mvns	r3, r3
+	ANDS	R2, R3		//clear bits
+ 80005ee:	401a      	ands	r2, r3
+	MOVS	R3, 0x2
+ 80005f0:	2302      	movs	r3, #2
+	LSLS	R3, #18
+ 80005f2:	049b      	lsls	r3, r3, #18
+	ORRS    R2, R3
+ 80005f4:	431a      	orrs	r2, r3
+	STR 	R2, [R1]
+ 80005f6:	600a      	str	r2, [r1, #0]
+	BX 	LR
+ 80005f8:	4770      	bx	lr
+
+080005fa <ADC1_IER_Set>:
+
+
+
+//Set interrupts
+ADC1_IER_Set:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 80005fa:	4916      	ldr	r1, [pc, #88]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_IER_OFFSET
+ 80005fc:	f04f 0204 	mov.w	r2, #4
+	ADDS 	R1, R2
+ 8000600:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]
+ 8000602:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1   //0b11101
+ 8000604:	2201      	movs	r2, #1
+	LSLS	R2, 0x4
+ 8000606:	0112      	lsls	r2, r2, #4
+	MOVS	R3, 0xD
+ 8000608:	230d      	movs	r3, #13
+	ORRS	R2, R3
+ 800060a:	431a      	orrs	r2, r3
+	ORRS	R0, R2
+ 800060c:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 800060e:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000610:	4770      	bx	lr
+
+08000612 <ADC1_IER_ADRDYIE_Clear>:
+
+ADC1_IER_ADRDYIE_Clear:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 8000612:	4910      	ldr	r1, [pc, #64]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_IER_OFFSET
+ 8000614:	f04f 0204 	mov.w	r2, #4
+	ADDS 	R1, R2
+ 8000618:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]
+ 800061a:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 800061c:	2201      	movs	r2, #1
+	MVNS	R2, R2
+ 800061e:	43d2      	mvns	r2, r2
+	ANDS	R0, R2
+ 8000620:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 8000622:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000624:	4770      	bx	lr
+
+08000626 <ADC1_ISR_State>:
+
+ADC1_ISR_State:
+	LDR	 	R1, =ADC_BASE_ADDR
+ 8000626:	490b      	ldr	r1, [pc, #44]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  	R2, =ADC_ISR_OFFSET
+ 8000628:	f04f 0200 	mov.w	r2, #0
+	ADDS 	R1, R2
+ 800062c:	1889      	adds	r1, r1, r2
+	LDR	 	R0, [R1]
+ 800062e:	6808      	ldr	r0, [r1, #0]
+	BX LR
+ 8000630:	4770      	bx	lr
+
+08000632 <ADC1_ISR_OVR_Clear>:
+
+ADC1_ISR_OVR_Clear:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000632:	4908      	ldr	r1, [pc, #32]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_ISR_OFFSET
+ 8000634:	f04f 0200 	mov.w	r2, #0
+	ADDS R1, R2
+ 8000638:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]
+ 800063a:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 800063c:	2201      	movs	r2, #1
+	LSLS R3, R2, #4
+ 800063e:	0113      	lsls	r3, r2, #4
+	ORRS R0, R3  //set bit to 1 to reset
+ 8000640:	4318      	orrs	r0, r3
+	STR	 R0, [R1]
+ 8000642:	6008      	str	r0, [r1, #0]
+	BX   LR
+ 8000644:	4770      	bx	lr
+
+08000646 <ADC1_DR_Get>:
+
+ADC1_DR_Get:
+	LDR	 R1, =ADC_BASE_ADDR
+ 8000646:	4903      	ldr	r1, [pc, #12]	@ (8000654 <ADC1_DR_Get+0xe>)
+	LDR  R2, =ADC_DR_OFFSET
+ 8000648:	f04f 0240 	mov.w	r2, #64	@ 0x40
+	ADDS R1, R2		//R1 - address of ADC_CRregister
+ 800064c:	1889      	adds	r1, r1, r2
+	LDR	 R0, [R1]	//R0 - content of ADC_CR register
+ 800064e:	6808      	ldr	r0, [r1, #0]
+	BX   LR
+ 8000650:	4770      	bx	lr
+ 8000652:	0000      	.short	0x0000
+	LDR	 	R1, =ADC_BASE_ADDR
+ 8000654:	42028000 	.word	0x42028000
+	LDR	 R1, =ADC12_CCR_ADDR
+ 8000658:	42028308 	.word	0x42028308
+
+0800065c <DMA_SECCFGR_Set_Nonsecure>:
+.equ DESTINATION,		0x2000001c  //0x20000010U
+.equ SOURCE, 			0x42028040	//adc_dr register
+
+
+DMA_SECCFGR_Set_Nonsecure:
+	LDR  R1, =GPDMA_SECCFGR
+ 800065c:	4975      	ldr	r1, [pc, #468]	@ (8000834 <DMA_Get_Converted_Value+0x8>)
+	LDR  R0, [R1]
+ 800065e:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000660:	2201      	movs	r2, #1
+	MVNS R2, R2
+ 8000662:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 8000664:	4010      	ands	r0, r2
+	STR  R0,[R1]
+ 8000666:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000668:	4770      	bx	lr
+
+0800066a <DMA_PRIVCFGR_Set_Unprivileged>:
+
+DMA_PRIVCFGR_Set_Unprivileged:
+	LDR  R1, =GPDMA_PRIVCFGR
+ 800066a:	4973      	ldr	r1, [pc, #460]	@ (8000838 <DMA_Get_Converted_Value+0xc>)
+	LDR  R0, [R1]
+ 800066c:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 800066e:	2201      	movs	r2, #1
+	MVNS R2, R2
+ 8000670:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 8000672:	4010      	ands	r0, r2
+	STR  R0,[R1]
+ 8000674:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000676:	4770      	bx	lr
+
+08000678 <DMA_C15BR1_BNDT>:
+
+//GPDMA_CxLLR = 0
+DMA_C15BR1_BNDT:
+	LDR  R1, =GPDMA_C15BR1
+ 8000678:	4970      	ldr	r1, [pc, #448]	@ (800083c <DMA_Get_Converted_Value+0x10>)
+	LDR  R0, [R1]
+ 800067a:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, #128//0x8
+ 800067c:	2280      	movs	r2, #128	@ 0x80
+	ORRS R0, R2
+ 800067e:	4310      	orrs	r0, r2
+	STR  R0,[R1]
+ 8000680:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000682:	4770      	bx	lr
+
+08000684 <DMA_C15BR1_BRC>:
+
+
+//Bits 26:16 BRC[10:0]: Block repeat counter
+DMA_C15BR1_BRC:
+	LDR  R1, =GPDMA_C15BR1
+ 8000684:	496d      	ldr	r1, [pc, #436]	@ (800083c <DMA_Get_Converted_Value+0x10>)
+	LDR  R0, [R1]
+ 8000686:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x7
+ 8000688:	2207      	movs	r2, #7
+	LSLS R2, #4
+ 800068a:	0112      	lsls	r2, r2, #4
+	ORRS R2, 0xf
+ 800068c:	f052 020f 	orrs.w	r2, r2, #15
+	LSLS R2, #4
+ 8000690:	0112      	lsls	r2, r2, #4
+	ORRS R2, 0xf
+ 8000692:	f052 020f 	orrs.w	r2, r2, #15
+	LSLS R2, #16
+ 8000696:	0412      	lsls	r2, r2, #16
+	MVNS R2, R2
+ 8000698:	43d2      	mvns	r2, r2
+	ANDS R0, R2  //clear bits
+ 800069a:	4010      	ands	r0, r2
+	MOVS R2, 0x4
+ 800069c:	2204      	movs	r2, #4
+	LSLS R2, #16
+ 800069e:	0412      	lsls	r2, r2, #16
+	ORRS R0, R2
+ 80006a0:	4310      	orrs	r0, r2
+	STR  R0,[R1]
+ 80006a2:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80006a4:	4770      	bx	lr
+
+080006a6 <DMA_C15CR_PRIO_Channel_Priority_0>:
+//Note: The GPDMA reads 16-bit ADC_DR register
+
+//Channel priority
+//GPDMA_CxCR.PRIO = 00 PRIO[1:0]:
+DMA_C15CR_PRIO_Channel_Priority_0:
+	LDR  R1, =GPDMA_C15CR
+ 80006a6:	4966      	ldr	r1, [pc, #408]	@ (8000840 <DMA_Get_Converted_Value+0x14>)
+	LDR  R0, [R1]
+ 80006a8:	6808      	ldr	r0, [r1, #0]
+	MOV  R2, 0x3
+ 80006aa:	f04f 0203 	mov.w	r2, #3
+	LSLS R2, #22
+ 80006ae:	0592      	lsls	r2, r2, #22
+	MVNS R2, R2
+ 80006b0:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 80006b2:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 80006b4:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80006b6:	4770      	bx	lr
+
+080006b8 <DMA_C15TR1_SAP_Port_0>:
+
+//Select port: GPDMA port = 0
+//Bit 14 SAP: source allocated port (GPDMA_CxTR1)
+DMA_C15TR1_SAP_Port_0:
+	LDR  R1, =GPDMA_C15TR1
+ 80006b8:	4962      	ldr	r1, [pc, #392]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 80006ba:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80006bc:	2201      	movs	r2, #1
+	LSLS R2, #14
+ 80006be:	0392      	lsls	r2, r2, #14
+	MVNS R2, R2
+ 80006c0:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 80006c2:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 80006c4:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80006c6:	4770      	bx	lr
+
+080006c8 <DMA_C15TR2_SWREQ_Software_Request_0>:
+
+//Peripheral request to GPDMA = adc4_dma
+//SWREQ = 0 and REQSEL[6:0] in GPDMA_CxTR2
+DMA_C15TR2_SWREQ_Software_Request_0:
+	LDR  R1, =GPDMA_C15TR2
+ 80006c8:	495f      	ldr	r1, [pc, #380]	@ (8000848 <DMA_Get_Converted_Value+0x1c>)
+	LDR  R0, [R1]
+ 80006ca:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 80006cc:	2201      	movs	r2, #1
+	LSLS R2, #9
+ 80006ce:	0252      	lsls	r2, r2, #9
+	MVNS R2, R2
+ 80006d0:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 80006d2:	4010      	ands	r0, r2
+	STR	 R0, [R1]
+ 80006d4:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80006d6:	4770      	bx	lr
+
+080006d8 <DMA_C15TR2_REQSEL_Hardware_Request_ADC4_DMA>:
+
+DMA_C15TR2_REQSEL_Hardware_Request_ADC4_DMA:  //1
+	LDR  R1, =GPDMA_C15TR2
+ 80006d8:	495b      	ldr	r1, [pc, #364]	@ (8000848 <DMA_Get_Converted_Value+0x1c>)
+	LDR  R0, [R1]
+ 80006da:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0xF //11
+ 80006dc:	220f      	movs	r2, #15
+	LSLS R2, #4	 //110000
+ 80006de:	0112      	lsls	r2, r2, #4
+	MOVS R3, 0xF //001111
+ 80006e0:	230f      	movs	r3, #15
+	ORRS R2, R3  //111111
+ 80006e2:	431a      	orrs	r2, r3
+	MVNS R2, R2
+ 80006e4:	43d2      	mvns	r2, r2
+	ANDS R0, R2  //clear bits 0-6
+ 80006e6:	4010      	ands	r0, r2
+	MOVS R2, #1	 //adc4_dma = 1
+ 80006e8:	2201      	movs	r2, #1
+	ORRS R0, R2
+ 80006ea:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 80006ec:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80006ee:	4770      	bx	lr
+
+080006f0 <DMA_C15TR2_REQSEL_Hardware_Request_ADC1_DMA>:
+
+DMA_C15TR2_REQSEL_Hardware_Request_ADC1_DMA:  //0
+	LDR  R1, =GPDMA_C15TR2
+ 80006f0:	4955      	ldr	r1, [pc, #340]	@ (8000848 <DMA_Get_Converted_Value+0x1c>)
+	LDR  R0, [R1]
+ 80006f2:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0xF //11
+ 80006f4:	220f      	movs	r2, #15
+	LSLS R2, #4	 //110000
+ 80006f6:	0112      	lsls	r2, r2, #4
+	MOVS R3, 0xF //001111
+ 80006f8:	230f      	movs	r3, #15
+	ORRS R2, R3  //111111
+ 80006fa:	431a      	orrs	r2, r3
+	MVNS R2, R2
+ 80006fc:	43d2      	mvns	r2, r2
+	ANDS R0, R2  //clear bits 0-6
+ 80006fe:	4010      	ands	r0, r2
+	MOVS R2, #0	 //adc4_dma = 1
+ 8000700:	2200      	movs	r2, #0
+	ORRS R0, R2
+ 8000702:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 8000704:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000706:	4770      	bx	lr
+
+08000708 <DMA_C15SAR_Source_Address>:
+
+//Select source register
+DMA_C15SAR_Source_Address:
+	LDR R1, =GPDMA_C15SAR
+ 8000708:	4950      	ldr	r1, [pc, #320]	@ (800084c <DMA_Get_Converted_Value+0x20>)
+	LDR R2, =SOURCE
+ 800070a:	4a51      	ldr	r2, [pc, #324]	@ (8000850 <DMA_Get_Converted_Value+0x24>)
+	STR R2, [R1]
+ 800070c:	600a      	str	r2, [r1, #0]
+	BX LR
+ 800070e:	4770      	bx	lr
+
+08000710 <DMA_C15TR1_SINC_Fixed>:
+
+DMA_C15TR1_SINC_Fixed:
+	LDR  R1, =GPDMA_C15TR1
+ 8000710:	494c      	ldr	r1, [pc, #304]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 8000712:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000714:	2201      	movs	r2, #1
+	LSLS R2, #3
+ 8000716:	00d2      	lsls	r2, r2, #3
+	MVNS R2, R2
+ 8000718:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 800071a:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 800071c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800071e:	4770      	bx	lr
+
+08000720 <DMA_C15TR1_SINC_Continuous>:
+
+DMA_C15TR1_SINC_Continuous:
+	LDR  R1, =GPDMA_C15TR1
+ 8000720:	4948      	ldr	r1, [pc, #288]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 8000722:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000724:	2201      	movs	r2, #1
+	LSLS R2, #3
+ 8000726:	00d2      	lsls	r2, r2, #3
+	ORRS R0, R2
+ 8000728:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 800072a:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800072c:	4770      	bx	lr
+
+0800072e <DMA_C15TR1_SDW_LOG2_Source_Data_Width_16>:
+
+//GPDMA data width = 16 bit
+//Bits 1:0 = 01: half-word (2 bytes)
+DMA_C15TR1_SDW_LOG2_Source_Data_Width_16:
+	LDR  R1, =GPDMA_C15TR1
+ 800072e:	4945      	ldr	r1, [pc, #276]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 8000730:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x3
+ 8000732:	2203      	movs	r2, #3
+	MVNS R2, R2
+ 8000734:	43d2      	mvns	r2, r2
+	ANDS R0, R2		//clear bits
+ 8000736:	4010      	ands	r0, r2
+	MOVS R2, 0x1
+ 8000738:	2201      	movs	r2, #1
+	ORRS R0, R2
+ 800073a:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 800073c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800073e:	4770      	bx	lr
+
+08000740 <DMA_C15TR1_SBL_1_Burst_Lenght_Single>:
+
+//Bits 9:4 SBL_1[5:0]: source burst length minus 1
+//The burst length unit is one data named beat within a burst.
+//If SBL_1[5:0] = 0, the burst can be named as single.
+DMA_C15TR1_SBL_1_Burst_Lenght_Single:
+	LDR  R1, =GPDMA_C15TR1
+ 8000740:	4940      	ldr	r1, [pc, #256]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 8000742:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x3
+ 8000744:	2203      	movs	r2, #3
+	LSLS R2, #4
+ 8000746:	0112      	lsls	r2, r2, #4
+	MOVS R3, 0xF
+ 8000748:	230f      	movs	r3, #15
+    ORRS R2, R3
+ 800074a:	431a      	orrs	r2, r3
+    LSLS R2, #4
+ 800074c:	0112      	lsls	r2, r2, #4
+	MVNS R2, R2
+ 800074e:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 8000750:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 8000752:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000754:	4770      	bx	lr
+
+08000756 <DMA_C15TR1_SBL_1_Burst_Lenght_2>:
+
+DMA_C15TR1_SBL_1_Burst_Lenght_2:
+	LDR  R1, =GPDMA_C15TR1
+ 8000756:	493b      	ldr	r1, [pc, #236]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 8000758:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x3
+ 800075a:	2203      	movs	r2, #3
+	LSLS R2, #4
+ 800075c:	0112      	lsls	r2, r2, #4
+	MOVS R3, 0xF
+ 800075e:	230f      	movs	r3, #15
+    ORRS R2, R3
+ 8000760:	431a      	orrs	r2, r3
+    LSLS R2, #4
+ 8000762:	0112      	lsls	r2, r2, #4
+	MVNS R2, R2
+ 8000764:	43d2      	mvns	r2, r2
+	ANDS R0, R2  //clear bits
+ 8000766:	4010      	ands	r0, r2
+	MOVS R2, 0x1
+ 8000768:	2201      	movs	r2, #1
+	LSLS R2, #4
+ 800076a:	0112      	lsls	r2, r2, #4
+	ORRS R0, R2
+ 800076c:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 800076e:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000770:	4770      	bx	lr
+
+08000772 <DMA_C15TR1_DAP_Port_1>:
+
+//DESTINATION configure
+//GPDMA port = 1 Bit 30 DAP: destination allocated port
+DMA_C15TR1_DAP_Port_1:
+	LDR  R1, =GPDMA_C15TR1
+ 8000772:	4934      	ldr	r1, [pc, #208]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 8000774:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000776:	2201      	movs	r2, #1
+	LSLS R2, #30
+ 8000778:	0792      	lsls	r2, r2, #30
+	ORRS R0, R2
+ 800077a:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 800077c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800077e:	4770      	bx	lr
+
+08000780 <DMA_C15DAR_Destination_Address>:
+
+//Select destination register
+DMA_C15DAR_Destination_Address:
+	LDR R1, =GPDMA_C15DAR
+ 8000780:	4934      	ldr	r1, [pc, #208]	@ (8000854 <DMA_Get_Converted_Value+0x28>)
+	LDR R2, =DESTINATION
+ 8000782:	4a35      	ldr	r2, [pc, #212]	@ (8000858 <DMA_Get_Converted_Value+0x2c>)
+	STR R2, [R1]
+ 8000784:	600a      	str	r2, [r1, #0]
+	BX LR
+ 8000786:	4770      	bx	lr
+
+08000788 <DMA_C15TR1_DINC_Fixed>:
+
+//fixed burst
+DMA_C15TR1_DINC_Fixed:
+	LDR  R1, =GPDMA_C15TR1
+ 8000788:	492e      	ldr	r1, [pc, #184]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 800078a:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 800078c:	2201      	movs	r2, #1
+	LSLS R2, #19
+ 800078e:	04d2      	lsls	r2, r2, #19
+	MVNS R2, R2
+ 8000790:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 8000792:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 8000794:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000796:	4770      	bx	lr
+
+08000798 <DMA_C15TR1_DINC_Continuous>:
+
+//fixed burst
+DMA_C15TR1_DINC_Continuous:
+	LDR  R1, =GPDMA_C15TR1
+ 8000798:	492a      	ldr	r1, [pc, #168]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 800079a:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 800079c:	2201      	movs	r2, #1
+	LSLS R2, #19
+ 800079e:	04d2      	lsls	r2, r2, #19
+	ORRS R0, R2
+ 80007a0:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 80007a2:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80007a4:	4770      	bx	lr
+
+080007a6 <DMA_C15TR1_DDW_LOG2_Source_Data_Width_32>:
+
+//GPDMA data width = 32 bit
+//Bits 17:16 = 10: word (4 bytes)
+DMA_C15TR1_DDW_LOG2_Source_Data_Width_32:
+	LDR  R1, =GPDMA_C15TR1
+ 80007a6:	4927      	ldr	r1, [pc, #156]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 80007a8:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x3
+ 80007aa:	2203      	movs	r2, #3
+	LSLS R2, #16
+ 80007ac:	0412      	lsls	r2, r2, #16
+	MVNS R2, R2
+ 80007ae:	43d2      	mvns	r2, r2
+	ANDS R0, R2		//clear bits
+ 80007b0:	4010      	ands	r0, r2
+	MOVS R2, 0x1
+ 80007b2:	2201      	movs	r2, #1
+	LSLS R2, #17
+ 80007b4:	0452      	lsls	r2, r2, #17
+	ORRS R0, R2
+ 80007b6:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 80007b8:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80007ba:	4770      	bx	lr
+
+080007bc <DMA_C15TR1_DDW_LOG2_Source_Data_Width_16>:
+
+//GPDMA data width = 16 bit
+//Bits 17:16 = 01: half-word (2 bytes)
+DMA_C15TR1_DDW_LOG2_Source_Data_Width_16:
+	LDR  R1, =GPDMA_C15TR1
+ 80007bc:	4921      	ldr	r1, [pc, #132]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 80007be:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x3
+ 80007c0:	2203      	movs	r2, #3
+	LSLS R2, #16
+ 80007c2:	0412      	lsls	r2, r2, #16
+	MVNS R2, R2
+ 80007c4:	43d2      	mvns	r2, r2
+	ANDS R0, R2		//clear bits
+ 80007c6:	4010      	ands	r0, r2
+	MOVS R2, 0x1
+ 80007c8:	2201      	movs	r2, #1
+	LSLS R2, #16
+ 80007ca:	0412      	lsls	r2, r2, #16
+	ORRS R0, R2
+ 80007cc:	4310      	orrs	r0, r2
+	STR	 R0, [R1]
+ 80007ce:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80007d0:	4770      	bx	lr
+
+080007d2 <DMA_C15TR1_DBL_1_Burst_Lenght_Single>:
+//DBL_1[5:0]: destination burst length minus 1,
+//Bits 25:20 DBL_1[5:0]: source burst length minus 1
+//The burst length unit is one data named beat within a burst.
+//If SBL_1[5:0] = 0, the burst can be named as single.
+DMA_C15TR1_DBL_1_Burst_Lenght_Single:
+	LDR  R1, =GPDMA_C15TR1
+ 80007d2:	491c      	ldr	r1, [pc, #112]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 80007d4:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x3
+ 80007d6:	2203      	movs	r2, #3
+	LSLS R2, #4
+ 80007d8:	0112      	lsls	r2, r2, #4
+	MOVS R3, 0xF
+ 80007da:	230f      	movs	r3, #15
+    ORRS R2, R3
+ 80007dc:	431a      	orrs	r2, r3
+    LSLS R2, #20
+ 80007de:	0512      	lsls	r2, r2, #20
+	MVNS R2, R2
+ 80007e0:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 80007e2:	4010      	ands	r0, r2
+	STR  R0, [R1]
+ 80007e4:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80007e6:	4770      	bx	lr
+
+080007e8 <DMA_C15TR1_DBL_1_Burst_Lenght_N>:
+
+DMA_C15TR1_DBL_1_Burst_Lenght_N:
+	LDR  R1, =GPDMA_C15TR1
+ 80007e8:	4916      	ldr	r1, [pc, #88]	@ (8000844 <DMA_Get_Converted_Value+0x18>)
+	LDR  R0, [R1]
+ 80007ea:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x3
+ 80007ec:	2203      	movs	r2, #3
+	LSLS R2, #4
+ 80007ee:	0112      	lsls	r2, r2, #4
+	MOVS R3, 0xF
+ 80007f0:	230f      	movs	r3, #15
+    ORRS R2, R3
+ 80007f2:	431a      	orrs	r2, r3
+    LSLS R2, #20
+ 80007f4:	0512      	lsls	r2, r2, #20
+	MVNS R2, R2
+ 80007f6:	43d2      	mvns	r2, r2
+	ANDS R0, R2
+ 80007f8:	4010      	ands	r0, r2
+	MOVS R2, 0x7
+ 80007fa:	2207      	movs	r2, #7
+	LSLS R2, #20
+ 80007fc:	0512      	lsls	r2, r2, #20
+	ORRS R0, R2
+ 80007fe:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 8000800:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000802:	4770      	bx	lr
+
+08000804 <DMA_C15CR_Set_Enable>:
+
+DMA_C15CR_Set_Enable:
+	LDR  R1, =GPDMA_C15CR
+ 8000804:	490e      	ldr	r1, [pc, #56]	@ (8000840 <DMA_Get_Converted_Value+0x14>)
+	LDR  R0, [R1]
+ 8000806:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000808:	2201      	movs	r2, #1
+	ORRS R0, R2
+ 800080a:	4310      	orrs	r0, r2
+	STR  R0, [R1]
+ 800080c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800080e:	4770      	bx	lr
+
+08000810 <DMA_C15CR_Set_Interrupts>:
+
+DMA_C15CR_Set_Interrupts:
+	LDR R1, =GPDMA_C15CR
+ 8000810:	490b      	ldr	r1, [pc, #44]	@ (8000840 <DMA_Get_Converted_Value+0x14>)
+	LDR R0, [R1]
+ 8000812:	6808      	ldr	r0, [r1, #0]
+	MOVS R2, 0x1
+ 8000814:	2201      	movs	r2, #1
+	LSLS R3, R2, #8
+ 8000816:	0213      	lsls	r3, r2, #8
+	ORRS R0, R3
+ 8000818:	4318      	orrs	r0, r3
+	LSLS R3, R2, #10
+ 800081a:	0293      	lsls	r3, r2, #10
+	ORRS R0, R3
+ 800081c:	4318      	orrs	r0, r3
+	LSLS R3, R2, #12
+ 800081e:	0313      	lsls	r3, r2, #12
+	ORRS R0, R3
+ 8000820:	4318      	orrs	r0, r3
+	STR  R0, [R1]
+ 8000822:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000824:	4770      	bx	lr
+
+08000826 <DMA_C15SR_Flags>:
+
+DMA_C15SR_Flags:
+	LDR R1, =GPDMA_C15SR
+ 8000826:	490d      	ldr	r1, [pc, #52]	@ (800085c <DMA_Get_Converted_Value+0x30>)
+	LDR R0, [R1]
+ 8000828:	6808      	ldr	r0, [r1, #0]
+	BX LR
+ 800082a:	4770      	bx	lr
+
+0800082c <DMA_Get_Converted_Value>:
+
+DMA_Get_Converted_Value:
+	LDR R1, =DESTINATION
+ 800082c:	490a      	ldr	r1, [pc, #40]	@ (8000858 <DMA_Get_Converted_Value+0x2c>)
+	LDR R0, [R1]
+ 800082e:	6808      	ldr	r0, [r1, #0]
+	BX LR
+ 8000830:	4770      	bx	lr
+ 8000832:	0000      	.short	0x0000
+	LDR  R1, =GPDMA_SECCFGR
+ 8000834:	40020000 	.word	0x40020000
+	LDR  R1, =GPDMA_PRIVCFGR
+ 8000838:	40020004 	.word	0x40020004
+	LDR  R1, =GPDMA_C15BR1
+ 800083c:	40020818 	.word	0x40020818
+	LDR  R1, =GPDMA_C15CR
+ 8000840:	400207e4 	.word	0x400207e4
+	LDR  R1, =GPDMA_C15TR1
+ 8000844:	40020810 	.word	0x40020810
+	LDR  R1, =GPDMA_C15TR2
+ 8000848:	40020814 	.word	0x40020814
+	LDR R1, =GPDMA_C15SAR
+ 800084c:	4002081c 	.word	0x4002081c
+	LDR R2, =SOURCE
+ 8000850:	42028040 	.word	0x42028040
+	LDR R1, =GPDMA_C15DAR
+ 8000854:	40020820 	.word	0x40020820
+	LDR R2, =DESTINATION
+ 8000858:	2000001c 	.word	0x2000001c
+	LDR R1, =GPDMA_C15SR
+ 800085c:	400207e0 	.word	0x400207e0
+
+08000860 <GPIOA_Set_Alt_Funtion_Mode>:
+.equ GPIOx_AFRL_OFFSET,		0x20U
+
+GPIOA_Set_Alt_Funtion_Mode:
+	//PA6 = AF2
+	//MODER bits = 10: Alternate function mode
+	LDR		R1, =GPIOA_BASE_ADDR
+ 8000860:	492f      	ldr	r1, [pc, #188]	@ (8000920 <GPIOH_Clear_BSRR_LED_Green+0x16>)
+	LDR		R2, =GPIOx_MODER_OFFSET
+ 8000862:	f04f 0200 	mov.w	r2, #0
+	ADDS	R1,	R2
+ 8000866:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000868:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 800086a:	2201      	movs	r2, #1
+	LSLS	R3, R2, #13
+ 800086c:	0353      	lsls	r3, r2, #13
+	ORRS	R0, R3	//set bit 13
+ 800086e:	4318      	orrs	r0, r3
+	LSLS	R3, R2, #12
+ 8000870:	0313      	lsls	r3, r2, #12
+	MVNS	R3,	R3
+ 8000872:	43db      	mvns	r3, r3
+	ANDS	R0, R3	//clear bit 12
+ 8000874:	4018      	ands	r0, r3
+	STR		R0,	[R1]
+ 8000876:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000878:	4770      	bx	lr
+
+0800087a <GPIOA_Set_Alt_Function>:
+
+GPIOA_Set_Alt_Function:
+	//PA6 = AF2
+	//AFRL 0010: AF2
+	LDR		R1, =GPIOA_BASE_ADDR
+ 800087a:	4929      	ldr	r1, [pc, #164]	@ (8000920 <GPIOH_Clear_BSRR_LED_Green+0x16>)
+	LDR		R2, =GPIOx_AFRL_OFFSET
+ 800087c:	f04f 0220 	mov.w	r2, #32
+	ADDS	R1,	R2
+ 8000880:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000882:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0xF
+ 8000884:	220f      	movs	r2, #15
+	LSLS	R2, #24
+ 8000886:	0612      	lsls	r2, r2, #24
+	MVNS	R2,	R2
+ 8000888:	43d2      	mvns	r2, r2
+	ANDS	R0, R2	//clear bits 24,25,26,27
+ 800088a:	4010      	ands	r0, r2
+	MOVS	R2, 0x1
+ 800088c:	2201      	movs	r2, #1
+	LSLS	R2, #25
+ 800088e:	0652      	lsls	r2, r2, #25
+	ORRS	R0, R2
+ 8000890:	4310      	orrs	r0, r2
+	STR		R0,	[R1]
+ 8000892:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000894:	4770      	bx	lr
+
+08000896 <GPIOH_Set_Moder_LED_Red>:
+
+
+//01: General purpose output mode
+//PH6 bit(s) 12,13
+GPIOH_Set_Moder_LED_Red:
+	LDR		R1, =GPIOH_BASE_ADDR
+ 8000896:	4923      	ldr	r1, [pc, #140]	@ (8000924 <GPIOH_Clear_BSRR_LED_Green+0x1a>)
+	LDR 	R2, =GPIOx_MODER_OFFSET
+ 8000898:	f04f 0200 	mov.w	r2, #0
+	ADDS	R1, R2
+ 800089c:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 800089e:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x3
+ 80008a0:	2203      	movs	r2, #3
+	LSLS	R2, #12
+ 80008a2:	0312      	lsls	r2, r2, #12
+	MVNS	R2, R2
+ 80008a4:	43d2      	mvns	r2, r2
+	ANDS	R0, R2	//clear bits
+ 80008a6:	4010      	ands	r0, r2
+	MOVS	R2, 0x1
+ 80008a8:	2201      	movs	r2, #1
+	LSLS	R2, #12
+ 80008aa:	0312      	lsls	r2, r2, #12
+	ORRS	R0, R2
+ 80008ac:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80008ae:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80008b0:	4770      	bx	lr
+
+080008b2 <GPIOH_Set_BSRR_LED_Red>:
+
+
+//PH7LD7GreenLD7User LED lights up when PH7 is set to 0.
+//PH6LD6RedLD6User LED lights up when PH6 is set to 0.
+GPIOH_Set_BSRR_LED_Red:
+	LDR		R1, =GPIOH_BASE_ADDR
+ 80008b2:	491c      	ldr	r1, [pc, #112]	@ (8000924 <GPIOH_Clear_BSRR_LED_Green+0x1a>)
+	LDR 	R2, =GPIOx_BSRR_OFFSET
+ 80008b4:	f04f 0218 	mov.w	r2, #24
+	ADDS	R1, R2
+ 80008b8:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80008ba:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80008bc:	2201      	movs	r2, #1
+	LSLS	R2, #6
+ 80008be:	0192      	lsls	r2, r2, #6
+	ORRS	R0, R2
+ 80008c0:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80008c2:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80008c4:	4770      	bx	lr
+
+080008c6 <GPIOH_Clear_BSRR_LED_Red>:
+
+GPIOH_Clear_BSRR_LED_Red:
+	LDR		R1, =GPIOH_BASE_ADDR
+ 80008c6:	4917      	ldr	r1, [pc, #92]	@ (8000924 <GPIOH_Clear_BSRR_LED_Green+0x1a>)
+	LDR 	R2, =GPIOx_BSRR_OFFSET
+ 80008c8:	f04f 0218 	mov.w	r2, #24
+	ADDS	R1, R2
+ 80008cc:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80008ce:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80008d0:	2201      	movs	r2, #1
+	LSLS	R2, #22
+ 80008d2:	0592      	lsls	r2, r2, #22
+	ORRS	R0, R2
+ 80008d4:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80008d6:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80008d8:	4770      	bx	lr
+
+080008da <GPIOH_Set_Moder_LED_Green>:
+
+
+	//01: General purpose output mode
+//PH7 bit(s) 14,15
+GPIOH_Set_Moder_LED_Green:
+	LDR		R1, =GPIOH_BASE_ADDR
+ 80008da:	4912      	ldr	r1, [pc, #72]	@ (8000924 <GPIOH_Clear_BSRR_LED_Green+0x1a>)
+	LDR 	R2, =GPIOx_MODER_OFFSET
+ 80008dc:	f04f 0200 	mov.w	r2, #0
+	ADDS	R1, R2
+ 80008e0:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80008e2:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x3
+ 80008e4:	2203      	movs	r2, #3
+	LSLS	R2, #14
+ 80008e6:	0392      	lsls	r2, r2, #14
+	MVNS	R2, R2
+ 80008e8:	43d2      	mvns	r2, r2
+	ANDS	R0, R2	//clear bits
+ 80008ea:	4010      	ands	r0, r2
+	MOVS	R2, 0x1
+ 80008ec:	2201      	movs	r2, #1
+	LSLS	R2, #14
+ 80008ee:	0392      	lsls	r2, r2, #14
+	ORRS	R0, R2
+ 80008f0:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80008f2:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80008f4:	4770      	bx	lr
+
+080008f6 <GPIOH_Set_BSRR_LED_Green>:
+
+
+//PH7LD7GreenLD7User LED lights up when PH7 is set to 0.
+//PH6LD6RedLD6User LED lights up when PH6 is set to 0.
+GPIOH_Set_BSRR_LED_Green:
+	LDR		R1, =GPIOH_BASE_ADDR
+ 80008f6:	490b      	ldr	r1, [pc, #44]	@ (8000924 <GPIOH_Clear_BSRR_LED_Green+0x1a>)
+	LDR 	R2, =GPIOx_BSRR_OFFSET
+ 80008f8:	f04f 0218 	mov.w	r2, #24
+	ADDS	R1, R2
+ 80008fc:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80008fe:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000900:	2201      	movs	r2, #1
+	LSLS	R2, #7
+ 8000902:	01d2      	lsls	r2, r2, #7
+	ORRS	R0, R2
+ 8000904:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000906:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000908:	4770      	bx	lr
+
+0800090a <GPIOH_Clear_BSRR_LED_Green>:
+
+GPIOH_Clear_BSRR_LED_Green:
+	LDR		R1, =GPIOH_BASE_ADDR
+ 800090a:	4906      	ldr	r1, [pc, #24]	@ (8000924 <GPIOH_Clear_BSRR_LED_Green+0x1a>)
+	LDR 	R2, =GPIOx_BSRR_OFFSET
+ 800090c:	f04f 0218 	mov.w	r2, #24
+	ADDS	R1, R2
+ 8000910:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000912:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000914:	2201      	movs	r2, #1
+	LSLS	R2, #23
+ 8000916:	05d2      	lsls	r2, r2, #23
+	ORRS	R0, R2
+ 8000918:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 800091a:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800091c:	4770      	bx	lr
+ 800091e:	0000      	.short	0x0000
+	LDR		R1, =GPIOA_BASE_ADDR
+ 8000920:	42020000 	.word	0x42020000
+	LDR		R1, =GPIOH_BASE_ADDR
+ 8000924:	42021c00 	.word	0x42021c00
+
+08000928 <NVIC_ADC12_Enable_Interupt>:
+.equ NVIC_DMA1_OFFSET,		29
+
+
+//positon 37  ADC12 (14 bits) global interrupt0x0000 00D4
+NVIC_ADC12_Enable_Interupt:
+	LDR		R1, =NVIC_ADC12
+ 8000928:	490d      	ldr	r1, [pc, #52]	@ (8000960 <NVIC_DMA1_Enable_Interupt+0xe>)
+	LDR		R0, [R1]
+ 800092a:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 800092c:	2201      	movs	r2, #1
+	LSLS	R2, NVIC_ADC12_OFFSET
+ 800092e:	0152      	lsls	r2, r2, #5
+	ORRS	R0, R2
+ 8000930:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000932:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000934:	4770      	bx	lr
+
+08000936 <NVIC_TIM8_Enable_Interupt>:
+
+//position 52 TIM8 update  0x00000110
+NVIC_TIM8_Enable_Interupt:
+	LDR		R1, =NVIC_TIM8
+ 8000936:	490a      	ldr	r1, [pc, #40]	@ (8000960 <NVIC_DMA1_Enable_Interupt+0xe>)
+	LDR		R0, [R1]
+ 8000938:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 800093a:	2201      	movs	r2, #1
+	LSLS	R2, NVIC_TIM8_OFFSET
+ 800093c:	0512      	lsls	r2, r2, #20
+	ORRS	R0, R2
+ 800093e:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000940:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000942:	4770      	bx	lr
+
+08000944 <NVIC_TIM2_Enable_Interupt>:
+
+//position 45 TIM2
+NVIC_TIM2_Enable_Interupt:
+	LDR		R1, =NVIC_TIM2
+ 8000944:	4906      	ldr	r1, [pc, #24]	@ (8000960 <NVIC_DMA1_Enable_Interupt+0xe>)
+	LDR		R0, [R1]
+ 8000946:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000948:	2201      	movs	r2, #1
+	LSLS	R2, NVIC_TIM2_OFFSET
+ 800094a:	0352      	lsls	r2, r2, #13
+	ORRS	R0, R2
+ 800094c:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 800094e:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000950:	4770      	bx	lr
+
+08000952 <NVIC_DMA1_Enable_Interupt>:
+
+
+
+NVIC_DMA1_Enable_Interupt:
+	LDR		R1, =NVIC_DMA1
+ 8000952:	4904      	ldr	r1, [pc, #16]	@ (8000964 <NVIC_DMA1_Enable_Interupt+0x12>)
+	LDR		R0, [R1]
+ 8000954:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000956:	2201      	movs	r2, #1
+	LSLS	R2, NVIC_DMA1_OFFSET
+ 8000958:	0752      	lsls	r2, r2, #29
+	ORRS	R0, R2
+ 800095a:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 800095c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800095e:	4770      	bx	lr
+	LDR		R1, =NVIC_ADC12
+ 8000960:	e000e104 	.word	0xe000e104
+	LDR		R1, =NVIC_DMA1
+ 8000964:	e000e100 	.word	0xe000e100
+
+08000968 <PWD_SVMCR_AVM1EN_Vdda_Set>:
+.equ	PWD_SVMCR_OFFSET,	0x10U
+.equ	PWD_SVMSR_OFFSET,	0x3cU
+
+//VDDA independent analog supply voltage monitor 1 enable
+PWD_SVMCR_AVM1EN_Vdda_Set:
+	LDR		R1, =PWD_BASE_OFFSET
+ 8000968:	490e      	ldr	r1, [pc, #56]	@ (80009a4 <PWD_SVMSR_VDDA1RDY_Get+0x14>)
+	LDR		R2, =PWD_SVMCR_OFFSET
+ 800096a:	f04f 0210 	mov.w	r2, #16
+	ADDS	R1,	R2
+ 800096e:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000970:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000972:	2201      	movs	r2, #1
+	LSLS	R2, #26
+ 8000974:	0692      	lsls	r2, r2, #26
+	ORRS	R0, R2
+ 8000976:	4310      	orrs	r0, r2
+	STR		R0,	[R1]
+ 8000978:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800097a:	4770      	bx	lr
+
+0800097c <PWD_SVMCR_ASV_Vdda_Set>:
+
+PWD_SVMCR_ASV_Vdda_Set:
+	LDR		R1, =PWD_BASE_OFFSET
+ 800097c:	4909      	ldr	r1, [pc, #36]	@ (80009a4 <PWD_SVMSR_VDDA1RDY_Get+0x14>)
+	LDR		R2, =PWD_SVMCR_OFFSET
+ 800097e:	f04f 0210 	mov.w	r2, #16
+	ADDS	R1,	R2
+ 8000982:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000984:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000986:	2201      	movs	r2, #1
+	LSLS	R2, #30
+ 8000988:	0792      	lsls	r2, r2, #30
+	ORRS	R0, R2
+ 800098a:	4310      	orrs	r0, r2
+	STR		R0,	[R1]
+ 800098c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 800098e:	4770      	bx	lr
+
+08000990 <PWD_SVMSR_VDDA1RDY_Get>:
+
+PWD_SVMSR_VDDA1RDY_Get:
+	LDR		R1, =PWD_BASE_OFFSET
+ 8000990:	4904      	ldr	r1, [pc, #16]	@ (80009a4 <PWD_SVMSR_VDDA1RDY_Get+0x14>)
+	LDR		R2, =PWD_SVMSR_OFFSET
+ 8000992:	f04f 023c 	mov.w	r2, #60	@ 0x3c
+	ADDS	R1,	R2
+ 8000996:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000998:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 800099a:	2201      	movs	r2, #1
+	LSLS	R2, #26
+ 800099c:	0692      	lsls	r2, r2, #26
+	ANDS	R0, R2
+ 800099e:	4010      	ands	r0, r2
+	BX LR
+ 80009a0:	4770      	bx	lr
+ 80009a2:	0000      	.short	0x0000
+	LDR		R1, =PWD_BASE_OFFSET
+ 80009a4:	46020800 	.word	0x46020800
+
+080009a8 <RCC_DMA1_Set_Clock>:
+.equ RCC_AHB3ENR_OFFSET,	0x94U		//ADC4
+
+.equ RCC_AHB1ENR,			0x46020c88U
+
+RCC_DMA1_Set_Clock:
+	LDR 	R1, =RCC_AHB1ENR
+ 80009a8:	4926      	ldr	r1, [pc, #152]	@ (8000a44 <RCC_APB1ENR1_TIM2EN_Set+0x16>)
+	LDR 	R0, [R1]
+ 80009aa:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80009ac:	2201      	movs	r2, #1
+	ORRS	R0, R2
+ 80009ae:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80009b0:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80009b2:	4770      	bx	lr
+
+080009b4 <RCC_AHB2ENR1_ADC12EN_Set>:
+
+RCC_AHB2ENR1_ADC12EN_Set:
+	LDR		R1, =RCC_BASE_ADDR
+ 80009b4:	4924      	ldr	r1, [pc, #144]	@ (8000a48 <RCC_APB1ENR1_TIM2EN_Set+0x1a>)
+	LDR		R2, =RCC_AHB2ENR1_OFFSET
+ 80009b6:	f04f 028c 	mov.w	r2, #140	@ 0x8c
+	ADDS	R1, R2
+ 80009ba:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80009bc:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80009be:	2201      	movs	r2, #1
+	LSLS	R2, 10
+ 80009c0:	0292      	lsls	r2, r2, #10
+	ORRS	R0, R2
+ 80009c2:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80009c4:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80009c6:	4770      	bx	lr
+
+080009c8 <RCC_AHB3ENR_PWREN_Set>:
+
+RCC_AHB3ENR_PWREN_Set:
+	LDR		R1, =RCC_BASE_ADDR
+ 80009c8:	491f      	ldr	r1, [pc, #124]	@ (8000a48 <RCC_APB1ENR1_TIM2EN_Set+0x1a>)
+	LDR		R2, =RCC_AHB3ENR_OFFSET
+ 80009ca:	f04f 0294 	mov.w	r2, #148	@ 0x94
+	ADDS	R1, R2
+ 80009ce:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80009d0:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80009d2:	2201      	movs	r2, #1
+	LSLS	R2, #2
+ 80009d4:	0092      	lsls	r2, r2, #2
+	ORRS	R0, R2
+ 80009d6:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 80009d8:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80009da:	4770      	bx	lr
+
+080009dc <RCC_AHB3ENR_PWREN_Clear>:
+
+RCC_AHB3ENR_PWREN_Clear:
+	LDR		R1, =RCC_BASE_ADDR
+ 80009dc:	491a      	ldr	r1, [pc, #104]	@ (8000a48 <RCC_APB1ENR1_TIM2EN_Set+0x1a>)
+	LDR		R2, =RCC_AHB3ENR_OFFSET
+ 80009de:	f04f 0294 	mov.w	r2, #148	@ 0x94
+	ADDS	R1, R2
+ 80009e2:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80009e4:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80009e6:	2201      	movs	r2, #1
+	LSLS	R2, #2
+ 80009e8:	0092      	lsls	r2, r2, #2
+	MVNS	R2, R2
+ 80009ea:	43d2      	mvns	r2, r2
+	ANDS	R0, R2
+ 80009ec:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 80009ee:	6008      	str	r0, [r1, #0]
+	BX LR
+ 80009f0:	4770      	bx	lr
+
+080009f2 <RCC_AHB2ENR1_GPIOAEN_Set>:
+
+RCC_AHB2ENR1_GPIOAEN_Set:
+	//enable clock on GPIOA
+	LDR		R1, =RCC_BASE_ADDR
+ 80009f2:	4915      	ldr	r1, [pc, #84]	@ (8000a48 <RCC_APB1ENR1_TIM2EN_Set+0x1a>)
+	LDR		R2, =RCC_AHB2ENR1_OFFSET
+ 80009f4:	f04f 028c 	mov.w	r2, #140	@ 0x8c
+	ADDS	R1, R2
+ 80009f8:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 80009fa:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 80009fc:	2201      	movs	r2, #1
+	LSLS	R2, #0 //set GPIOA bit 0 clock enable
+ 80009fe:	0012      	movs	r2, r2
+	ORRS	R0, R2
+ 8000a00:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000a02:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000a04:	4770      	bx	lr
+
+08000a06 <RCC_AHB2ENR1_GPIOHEN_Set>:
+
+RCC_AHB2ENR1_GPIOHEN_Set:
+	//enable clock on GPIOH
+	LDR		R1, =RCC_BASE_ADDR
+ 8000a06:	4910      	ldr	r1, [pc, #64]	@ (8000a48 <RCC_APB1ENR1_TIM2EN_Set+0x1a>)
+	LDR		R2, =RCC_AHB2ENR1_OFFSET
+ 8000a08:	f04f 028c 	mov.w	r2, #140	@ 0x8c
+	ADDS	R1, R2
+ 8000a0c:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000a0e:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000a10:	2201      	movs	r2, #1
+	LSLS	R2, #7 //set GPIOH bit 7 clock enable
+ 8000a12:	01d2      	lsls	r2, r2, #7
+	ORRS	R0, R2
+ 8000a14:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000a16:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000a18:	4770      	bx	lr
+
+08000a1a <RCC_APB2ENR_TIM8EN_Set>:
+
+RCC_APB2ENR_TIM8EN_Set:
+	LDR		R1, =RCC_BASE_ADDR
+ 8000a1a:	490b      	ldr	r1, [pc, #44]	@ (8000a48 <RCC_APB1ENR1_TIM2EN_Set+0x1a>)
+	LDR		R2, =RCC_APB2ENR_OFFSET
+ 8000a1c:	f04f 02a4 	mov.w	r2, #164	@ 0xa4
+	ADDS	R1, R2
+ 8000a20:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000a22:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000a24:	2201      	movs	r2, #1
+	LSLS	R2, #13
+ 8000a26:	0352      	lsls	r2, r2, #13
+	ORRS	R0, R2
+ 8000a28:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000a2a:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000a2c:	4770      	bx	lr
+
+08000a2e <RCC_APB1ENR1_TIM2EN_Set>:
+
+RCC_APB1ENR1_TIM2EN_Set:
+	LDR		R1, =RCC_BASE_ADDR
+ 8000a2e:	4906      	ldr	r1, [pc, #24]	@ (8000a48 <RCC_APB1ENR1_TIM2EN_Set+0x1a>)
+	LDR		R2, =RCC_APB1ENR1_OFFSET
+ 8000a30:	f04f 029c 	mov.w	r2, #156	@ 0x9c
+	ADDS	R1, R2
+ 8000a34:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000a36:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000a38:	2201      	movs	r2, #1
+	LSLS	R2, #0
+ 8000a3a:	0012      	movs	r2, r2
+	ORRS	R0, R2
+ 8000a3c:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000a3e:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000a40:	4770      	bx	lr
+ 8000a42:	0000      	.short	0x0000
+	LDR 	R1, =RCC_AHB1ENR
+ 8000a44:	46020c88 	.word	0x46020c88
+	LDR		R1, =RCC_BASE_ADDR
+ 8000a48:	46020c00 	.word	0x46020c00
+
+08000a4c <TIM8_Set_PSC_Value>:
+.equ	PRESCALER, 	0xF9F	//0x18f          //39999
+.equ	ARRCOUNTTO, 0x3E7		   //999	--0.000025
+.equ	CCRCOUNTTO, 0x63 // 0x1F3//0x12C   //499
+
+TIM8_Set_PSC_Value:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000a4c:	495b      	ldr	r1, [pc, #364]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_PSC_OFFSET
+ 8000a4e:	f04f 0228 	mov.w	r2, #40	@ 0x28
+	ADDS	R1, R2
+ 8000a52:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000a54:	6808      	ldr	r0, [r1, #0]
+	LDR		R2, =PRESCALER
+ 8000a56:	f640 729f 	movw	r2, #3999	@ 0xf9f
+	ORRS	R0, R2
+ 8000a5a:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000a5c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000a5e:	4770      	bx	lr
+
+08000a60 <TIM8_Set_ARR_Value>:
+
+//Auto-Reload Register (TIMx_ARR)
+TIM8_Set_ARR_Value:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000a60:	4956      	ldr	r1, [pc, #344]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_ARR_OFFSET
+ 8000a62:	f04f 022c 	mov.w	r2, #44	@ 0x2c
+	ADDS	R1, R2
+ 8000a66:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000a68:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x0
+ 8000a6a:	2200      	movs	r2, #0
+	ANDS	R0, R2
+ 8000a6c:	4010      	ands	r0, r2
+	LDR		R2, =ARRCOUNTTO
+ 8000a6e:	f240 32e7 	movw	r2, #999	@ 0x3e7
+	ORRS	R0, R2
+ 8000a72:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000a74:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000a76:	4770      	bx	lr
+
+08000a78 <TIM8_Clear_UIF_Flag>:
+
+TIM8_Clear_UIF_Flag:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000a78:	4950      	ldr	r1, [pc, #320]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_SR_OFFSET
+ 8000a7a:	f04f 0210 	mov.w	r2, #16
+	ADDS	R1, R2
+ 8000a7e:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000a80:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000a82:	2201      	movs	r2, #1
+	MVNS	R2, R2
+ 8000a84:	43d2      	mvns	r2, r2
+	ANDS	R0, R2
+ 8000a86:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 8000a88:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000a8a:	4770      	bx	lr
+
+08000a8c <TIM8_Set_CCnS_To_Channel_Output>:
+
+TIM8_Set_CCnS_To_Channel_Output:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000a8c:	494b      	ldr	r1, [pc, #300]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CCMR1_OFFSET
+ 8000a8e:	f04f 0218 	mov.w	r2, #24
+	ADDS	R1, R2
+ 8000a92:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000a94:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x3
+ 8000a96:	2203      	movs	r2, #3
+	LSLS	R2, #0
+ 8000a98:	0012      	movs	r2, r2
+	MVNS	R2, R2
+ 8000a9a:	43d2      	mvns	r2, r2
+	ANDS	R0, R2		//clear bits 0,1
+ 8000a9c:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 8000a9e:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000aa0:	4770      	bx	lr
+
+08000aa2 <TIM8_Set_DITHEN_False>:
+
+TIM8_Set_DITHEN_False:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000aa2:	4946      	ldr	r1, [pc, #280]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CR1_OFFSET
+ 8000aa4:	f04f 0200 	mov.w	r2, #0
+	ADDS	R1, R2
+ 8000aa8:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000aaa:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000aac:	2201      	movs	r2, #1
+	LSLS	R2, #12
+ 8000aae:	0312      	lsls	r2, r2, #12
+	MVNS	R2, R2
+ 8000ab0:	43d2      	mvns	r2, r2
+	ANDS	R0, R2
+ 8000ab2:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 8000ab4:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000ab6:	4770      	bx	lr
+
+08000ab8 <TIM8_Set_CCRn_WaveGen_Value>:
+
+TIM8_Set_CCRn_WaveGen_Value:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000ab8:	4940      	ldr	r1, [pc, #256]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CCR1_OFFSET
+ 8000aba:	f04f 0234 	mov.w	r2, #52	@ 0x34
+	ADDS	R1, R2
+ 8000abe:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000ac0:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x0
+ 8000ac2:	2200      	movs	r2, #0
+	ANDS	R0, R2
+ 8000ac4:	4010      	ands	r0, r2
+	LDR		R2, =CCRCOUNTTO
+ 8000ac6:	f04f 0263 	mov.w	r2, #99	@ 0x63
+	ORRS	R0, R2
+ 8000aca:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000acc:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000ace:	4770      	bx	lr
+
+08000ad0 <TIM8_Clear_CC1IF_Flag>:
+
+TIM8_Clear_CC1IF_Flag:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000ad0:	493a      	ldr	r1, [pc, #232]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_SR_OFFSET
+ 8000ad2:	f04f 0210 	mov.w	r2, #16
+	ADDS	R1, R2
+ 8000ad6:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000ad8:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000ada:	2201      	movs	r2, #1
+	LSLS	R2, #1
+ 8000adc:	0052      	lsls	r2, r2, #1
+	MVNS	R2, R2
+ 8000ade:	43d2      	mvns	r2, r2
+	ANDS	R0, R2
+ 8000ae0:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 8000ae2:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000ae4:	4770      	bx	lr
+
+08000ae6 <TIM8_Set_DIR_UpCounter>:
+
+
+TIM8_Set_DIR_UpCounter:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000ae6:	4935      	ldr	r1, [pc, #212]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CR1_OFFSET
+ 8000ae8:	f04f 0200 	mov.w	r2, #0
+	ADDS	R1, R2
+ 8000aec:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000aee:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000af0:	2201      	movs	r2, #1
+	LSLS	R2, #4
+ 8000af2:	0112      	lsls	r2, r2, #4
+	MVNS	R2, R2
+ 8000af4:	43d2      	mvns	r2, r2
+	ANDS	R0, R2
+ 8000af6:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 8000af8:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000afa:	4770      	bx	lr
+
+08000afc <TIM8_Set_OCnM_To_Toggle_Mode>:
+
+TIM8_Set_OCnM_To_Toggle_Mode:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000afc:	492f      	ldr	r1, [pc, #188]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CCMR1_OFFSET
+ 8000afe:	f04f 0218 	mov.w	r2, #24
+	ADDS	R1, R2
+ 8000b02:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000b04:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000b06:	2201      	movs	r2, #1
+	LSLS	R2, #16
+ 8000b08:	0412      	lsls	r2, r2, #16
+	MVNS	R2, R2
+ 8000b0a:	43d2      	mvns	r2, r2
+	ANDS	R0, R2 //clear bit 16
+ 8000b0c:	4010      	ands	r0, r2
+	MOVS  	R2, #7
+ 8000b0e:	2207      	movs	r2, #7
+	LSLS	R2, #4
+ 8000b10:	0112      	lsls	r2, r2, #4
+	MVNS	R2, R2
+ 8000b12:	43d2      	mvns	r2, r2
+	ANDS 	R0, R2 //clear bits 4-6
+ 8000b14:	4010      	ands	r0, r2
+	MOVS	R2, #3
+ 8000b16:	2203      	movs	r2, #3
+	LSLS	R2, #4
+ 8000b18:	0112      	lsls	r2, r2, #4
+	ORRS	R0, R2 //set bits 4, 5
+ 8000b1a:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000b1c:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000b1e:	4770      	bx	lr
+
+08000b20 <TIM8_Set_CC1P_Polarity_ActiveHigh>:
+
+TIM8_Set_CC1P_Polarity_ActiveHigh:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000b20:	4926      	ldr	r1, [pc, #152]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CCER_OFFSET
+ 8000b22:	f04f 0220 	mov.w	r2, #32
+	ADDS	R1, R2
+ 8000b26:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000b28:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000b2a:	2201      	movs	r2, #1
+	LSLS	R2, #1
+ 8000b2c:	0052      	lsls	r2, r2, #1
+	MVNS	R2, R2
+ 8000b2e:	43d2      	mvns	r2, r2
+	ANDS	R0, R2 //clear bit 1
+ 8000b30:	4010      	ands	r0, r2
+	STR		R0, [R1]
+ 8000b32:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000b34:	4770      	bx	lr
+
+08000b36 <TIM8_Set_CCnE_Output_Enable_To_GPIO>:
+
+TIM8_Set_CCnE_Output_Enable_To_GPIO:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000b36:	4921      	ldr	r1, [pc, #132]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CCER_OFFSET
+ 8000b38:	f04f 0220 	mov.w	r2, #32
+	ADDS	R1, R2
+ 8000b3c:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000b3e:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x1
+ 8000b40:	2201      	movs	r2, #1
+	ORRS	R0, R2 //set bit 1
+ 8000b42:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000b44:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000b46:	4770      	bx	lr
+
+08000b48 <TIM8_Set_CEN_Counter_Enable>:
+
+TIM8_Set_CEN_Counter_Enable:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000b48:	491c      	ldr	r1, [pc, #112]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CR1_OFFSET
+ 8000b4a:	f04f 0200 	mov.w	r2, #0
+	ADDS	R1, R2
+ 8000b4e:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000b50:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000b52:	2201      	movs	r2, #1
+	ORRS	R0, R2
+ 8000b54:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000b56:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000b58:	4770      	bx	lr
+
+08000b5a <TIM8_Set_MMS_Update_Trigger_Output>:
+
+TIM8_Set_MMS_Update_Trigger_Output:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000b5a:	4918      	ldr	r1, [pc, #96]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_CR2_OFFSET
+ 8000b5c:	f04f 0204 	mov.w	r2, #4
+	ADDS	R1, R2
+ 8000b60:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000b62:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x7
+ 8000b64:	2207      	movs	r2, #7
+	LSLS	R2, #4
+ 8000b66:	0112      	lsls	r2, r2, #4
+	MVNS	R2, R2
+ 8000b68:	43d2      	mvns	r2, r2
+	ANDS	R0, R2
+ 8000b6a:	4010      	ands	r0, r2
+	MOVS	R2, 0x2
+ 8000b6c:	2202      	movs	r2, #2
+	LSLS	R2, #4
+ 8000b6e:	0112      	lsls	r2, r2, #4
+	ORRS	R0, R2
+ 8000b70:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000b72:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000b74:	4770      	bx	lr
+
+08000b76 <TIM8_Set_UIF_Update_Interrupt_Enable>:
+
+TIM8_Set_UIF_Update_Interrupt_Enable:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000b76:	4911      	ldr	r1, [pc, #68]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_DIER_OFFSET
+ 8000b78:	f04f 020c 	mov.w	r2, #12
+	ADDS	R1, R2
+ 8000b7c:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000b7e:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000b80:	2201      	movs	r2, #1
+	ORRS	R0, R2
+ 8000b82:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000b84:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000b86:	4770      	bx	lr
+
+08000b88 <TIM8_Set_CC1IE_Update_Interrupt_Enable>:
+
+//Bit 1 CC1IE: Capture/Compare 1 interrupt enable
+TIM8_Set_CC1IE_Update_Interrupt_Enable:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000b88:	490c      	ldr	r1, [pc, #48]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_DIER_OFFSET
+ 8000b8a:	f04f 020c 	mov.w	r2, #12
+	ADDS	R1, R2
+ 8000b8e:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000b90:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x01
+ 8000b92:	2201      	movs	r2, #1
+	LSLS	R2, #1
+ 8000b94:	0052      	lsls	r2, r2, #1
+	ORRS	R0, R2
+ 8000b96:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000b98:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000b9a:	4770      	bx	lr
+
+08000b9c <TIM8_Get_SR_Status>:
+
+TIM8_Get_SR_Status:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000b9c:	4907      	ldr	r1, [pc, #28]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_SR_OFFSET
+ 8000b9e:	f04f 0210 	mov.w	r2, #16
+	ADDS	R1, R2
+ 8000ba2:	1889      	adds	r1, r1, r2
+	LDRH	R0, [R1]
+ 8000ba4:	8808      	ldrh	r0, [r1, #0]
+	BX LR
+ 8000ba6:	4770      	bx	lr
+
+08000ba8 <TIM8_RCR_Set>:
+
+TIM8_RCR_Set:
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000ba8:	4904      	ldr	r1, [pc, #16]	@ (8000bbc <TIM8_RCR_Set+0x14>)
+	LDR		R2, =TIMx_RCR_OFFSET
+ 8000baa:	f04f 0230 	mov.w	r2, #48	@ 0x30
+	ADDS	R1, R2
+ 8000bae:	1889      	adds	r1, r1, r2
+	LDR		R0, [R1]
+ 8000bb0:	6808      	ldr	r0, [r1, #0]
+	MOVS	R2, 0x14
+ 8000bb2:	2214      	movs	r2, #20
+	ORRS	R0, R2
+ 8000bb4:	4310      	orrs	r0, r2
+	STR		R0, [R1]
+ 8000bb6:	6008      	str	r0, [r1, #0]
+	BX LR
+ 8000bb8:	4770      	bx	lr
+ 8000bba:	0000      	.short	0x0000
+	LDR		R1, =TIM8_BASE_OFFSET
+ 8000bbc:	40013400 	.word	0x40013400
+
+08000bc0 <main>:
+
+volatile int adc_calibrate = 0;
+volatile int adc_enabled = 0;
+volatile int adc_started = 0;
+int main(void)
+{
+ 8000bc0:	b580      	push	{r7, lr}
+ 8000bc2:	b082      	sub	sp, #8
+ 8000bc4:	af00      	add	r7, sp, #0
+	_dma[0]=1;  //Ox2000001c
+ 8000bc6:	4b56      	ldr	r3, [pc, #344]	@ (8000d20 <main+0x160>)
+ 8000bc8:	2201      	movs	r2, #1
+ 8000bca:	801a      	strh	r2, [r3, #0]
+	//PWD
+	//enable VDDA power source
+	RCC_AHB3ENR_PWREN_Set();
+ 8000bcc:	f7ff fefc 	bl	80009c8 <RCC_AHB3ENR_PWREN_Set>
+	PWD_SVMCR_AVM1EN_Vdda_Set();
+ 8000bd0:	f7ff feca 	bl	8000968 <PWD_SVMCR_AVM1EN_Vdda_Set>
+	while(PWD_SVMSR_VDDA1RDY_Get() == 0);
+ 8000bd4:	bf00      	nop
+ 8000bd6:	f7ff fedb 	bl	8000990 <PWD_SVMSR_VDDA1RDY_Get>
+ 8000bda:	4603      	mov	r3, r0
+ 8000bdc:	2b00      	cmp	r3, #0
+ 8000bde:	d0fa      	beq.n	8000bd6 <main+0x16>
+	PWD_SVMCR_ASV_Vdda_Set();
+ 8000be0:	f7ff fecc 	bl	800097c <PWD_SVMCR_ASV_Vdda_Set>
+	//RCC_AHB3ENR_PWREN_Clear();
+
+	//enable GPIOA
+	RCC_AHB2ENR1_GPIOAEN_Set();
+ 8000be4:	f7ff ff05 	bl	80009f2 <RCC_AHB2ENR1_GPIOAEN_Set>
+	GPIOA_Set_Alt_Funtion_Mode();
+ 8000be8:	f7ff fe3a 	bl	8000860 <GPIOA_Set_Alt_Funtion_Mode>
+	GPIOA_Set_Alt_Function();
+ 8000bec:	f7ff fe45 	bl	800087a <GPIOA_Set_Alt_Function>
+
+	//enable GPIOH
+	RCC_AHB2ENR1_GPIOHEN_Set();
+ 8000bf0:	f7ff ff09 	bl	8000a06 <RCC_AHB2ENR1_GPIOHEN_Set>
+	GPIOH_Set_BSRR_LED_Red();	//to turn off
+ 8000bf4:	f7ff fe5d 	bl	80008b2 <GPIOH_Set_BSRR_LED_Red>
+	GPIOH_Set_Moder_LED_Red();
+ 8000bf8:	f7ff fe4d 	bl	8000896 <GPIOH_Set_Moder_LED_Red>
+	GPIOH_Set_BSRR_LED_Green();	//to turn off
+ 8000bfc:	f7ff fe7b 	bl	80008f6 <GPIOH_Set_BSRR_LED_Green>
+	GPIOH_Set_Moder_LED_Green();
+ 8000c00:	f7ff fe6b 	bl	80008da <GPIOH_Set_Moder_LED_Green>
+
+	//configure TIM2 timer
+	RCC_APB2ENR_TIM8EN_Set();
+ 8000c04:	f7ff ff09 	bl	8000a1a <RCC_APB2ENR_TIM8EN_Set>
+	TIM8_Set_PSC_Value();
+ 8000c08:	f7ff ff20 	bl	8000a4c <TIM8_Set_PSC_Value>
+	TIM8_Set_ARR_Value();
+ 8000c0c:	f7ff ff28 	bl	8000a60 <TIM8_Set_ARR_Value>
+	TIM8_Clear_UIF_Flag();
+ 8000c10:	f7ff ff32 	bl	8000a78 <TIM8_Clear_UIF_Flag>
+	TIM8_Set_CCnS_To_Channel_Output();
+ 8000c14:	f7ff ff3a 	bl	8000a8c <TIM8_Set_CCnS_To_Channel_Output>
+	TIM8_Set_DITHEN_False();
+ 8000c18:	f7ff ff43 	bl	8000aa2 <TIM8_Set_DITHEN_False>
+	TIM8_Set_CCRn_WaveGen_Value();
+ 8000c1c:	f7ff ff4c 	bl	8000ab8 <TIM8_Set_CCRn_WaveGen_Value>
+	TIM8_Set_DIR_UpCounter();
+ 8000c20:	f7ff ff61 	bl	8000ae6 <TIM8_Set_DIR_UpCounter>
+	TIM8_Set_MMS_Update_Trigger_Output();
+ 8000c24:	f7ff ff99 	bl	8000b5a <TIM8_Set_MMS_Update_Trigger_Output>
+	//TIM8_Set_OCnM_To_Toggle_Mode();
+	TIM8_Set_CC1P_Polarity_ActiveHigh();
+ 8000c28:	f7ff ff7a 	bl	8000b20 <TIM8_Set_CC1P_Polarity_ActiveHigh>
+	TIM8_Set_CCnE_Output_Enable_To_GPIO();
+ 8000c2c:	f7ff ff83 	bl	8000b36 <TIM8_Set_CCnE_Output_Enable_To_GPIO>
+	TIM8_Set_UIF_Update_Interrupt_Enable();
+ 8000c30:	f7ff ffa1 	bl	8000b76 <TIM8_Set_UIF_Update_Interrupt_Enable>
+	TIM8_Set_CC1IE_Update_Interrupt_Enable();
+ 8000c34:	f7ff ffa8 	bl	8000b88 <TIM8_Set_CC1IE_Update_Interrupt_Enable>
+	NVIC_TIM8_Enable_Interupt();
+ 8000c38:	f7ff fe7d 	bl	8000936 <NVIC_TIM8_Enable_Interupt>
+
+	//TIM8_Set_CEN_Counter_Enable();
+
+
+	//ADC
+	RCC_AHB2ENR1_ADC12EN_Set();
+ 8000c3c:	f7ff feba 	bl	80009b4 <RCC_AHB2ENR1_ADC12EN_Set>
+	ADC12_CCR_PRESC_4();
+ 8000c40:	f7ff fcd0 	bl	80005e4 <ADC12_CCR_PRESC_4>
+
+		//voltage regulator
+	ADC1_DEEPPWD_Clear();
+ 8000c44:	f7ff fb28 	bl	8000298 <ADC1_DEEPPWD_Clear>
+	ADC1_CR_ADVREGEN_Set();
+ 8000c48:	f7ff fb31 	bl	80002ae <ADC1_CR_ADVREGEN_Set>
+	while(ADC1_ISR_LDORDY_Get() == 0);
+ 8000c4c:	bf00      	nop
+ 8000c4e:	f7ff fb38 	bl	80002c2 <ADC1_ISR_LDORDY_Get>
+ 8000c52:	4603      	mov	r3, r0
+ 8000c54:	2b00      	cmp	r3, #0
+ 8000c56:	d0fa      	beq.n	8000c4e <main+0x8e>
+		//calibrate
+	ADC1_CR_ADCALLIN_Set();
+ 8000c58:	f7ff fb3d 	bl	80002d6 <ADC1_CR_ADCALLIN_Set>
+	ADC1_CALFACT_CAPTURE_COEF_Clear();
+ 8000c5c:	f7ff fb45 	bl	80002ea <ADC1_CALFACT_CAPTURE_COEF_Clear>
+	ADC1_CALFACT_LATCH_COEF_Clear();
+ 8000c60:	f7ff fb4e 	bl	8000300 <ADC1_CALFACT_LATCH_COEF_Clear>
+	ADC1_CR_ADCAL_Set();
+ 8000c64:	f7ff fb57 	bl	8000316 <ADC1_CR_ADCAL_Set>
+	adc_calibrate = 1;
+ 8000c68:	4b2e      	ldr	r3, [pc, #184]	@ (8000d24 <main+0x164>)
+ 8000c6a:	2201      	movs	r2, #1
+ 8000c6c:	601a      	str	r2, [r3, #0]
+	while(ADC1_CR_ADCAL_Get() !=0){}
+ 8000c6e:	bf00      	nop
+ 8000c70:	f7ff fb5b 	bl	800032a <ADC1_CR_ADCAL_Get>
+ 8000c74:	4603      	mov	r3, r0
+ 8000c76:	2b00      	cmp	r3, #0
+ 8000c78:	d1fa      	bne.n	8000c70 <main+0xb0>
+		//channel selection
+	uint8_t ch19_internal_temp = 0x13;    	//19th channel = hex13
+ 8000c7a:	2313      	movs	r3, #19
+ 8000c7c:	71fb      	strb	r3, [r7, #7]
+	ADC1_PCSEL_PCSEL_Set(ch19_internal_temp);
+ 8000c7e:	79fb      	ldrb	r3, [r7, #7]
+ 8000c80:	4618      	mov	r0, r3
+ 8000c82:	f7ff fb5b 	bl	800033c <ADC1_PCSEL_PCSEL_Set>
+	ADC1_DIFSEL_DIFSEL_SingleEnded(ch19_internal_temp);
+ 8000c86:	79fb      	ldrb	r3, [r7, #7]
+ 8000c88:	4618      	mov	r0, r3
+ 8000c8a:	f7ff fb61 	bl	8000350 <ADC1_DIFSEL_DIFSEL_SingleEnded>
+	ADC1_SQR1_SQ1(ch19_internal_temp);
+ 8000c8e:	79fb      	ldrb	r3, [r7, #7]
+ 8000c90:	4618      	mov	r0, r3
+ 8000c92:	f7ff fb68 	bl	8000366 <ADC1_SQR1_SQ1>
+	ADC1_SMPR2_SMP19_20CLK();
+ 8000c96:	f7ff fbe9 	bl	800046c <ADC1_SMPR2_SMP19_20CLK>
+	//ADC1_SMPR2_SMP19_5CLK();
+	//ADC1_SMPR2_SMP19_12CLK();
+	//ADC1_SMPR2_SMP19_814CLK();
+	ADC12_CCR_VSENSESEL_Set();
+ 8000c9a:	f7ff fc8a 	bl	80005b2 <ADC12_CCR_VSENSESEL_Set>
+	ADC1_SQR1_L(0);
+ 8000c9e:	2000      	movs	r0, #0
+ 8000ca0:	f7ff fba1 	bl	80003e6 <ADC1_SQR1_L>
+		//configuration
+	ADC1_CFGR1_DMNGT_DmaOneShot();
+ 8000ca4:	f7ff fbf0 	bl	8000488 <ADC1_CFGR1_DMNGT_DmaOneShot>
+	//ADC1_CFGR1_DMNGT_DmaCircular();
+	//ADC1_CFGR1_DMNGT_Regular();
+	ADC1_CFGR1_CONT_Single();
+ 8000ca8:	f7ff fc4a 	bl	8000540 <ADC1_CFGR1_CONT_Single>
+	//ADC1_CFGR1_CONT_Continuos();
+	ADC1_CFGR1_OVRMOD_Overwrite();
+ 8000cac:	f7ff fc3e 	bl	800052c <ADC1_CFGR1_OVRMOD_Overwrite>
+	//ADC1_CFGR1_AUTDLY_Set();
+		//external trigger TIM8
+	ADC1_CFGR1_EXTEN(1);
+ 8000cb0:	2001      	movs	r0, #1
+ 8000cb2:	f7ff fc1c 	bl	80004ee <ADC1_CFGR1_EXTEN>
+	ADC1_CFGR1_EXTSEL();
+ 8000cb6:	f7ff fc09 	bl	80004cc <ADC1_CFGR1_EXTSEL>
+		//interrupts
+	ADC1_IER_Set();
+ 8000cba:	f7ff fc9e 	bl	80005fa <ADC1_IER_Set>
+	NVIC_ADC12_Enable_Interupt();
+ 8000cbe:	f7ff fe33 	bl	8000928 <NVIC_ADC12_Enable_Interupt>
+
+	ADC1_CR_ADEN();
+ 8000cc2:	f7ff fc5c 	bl	800057e <ADC1_CR_ADEN>
+	adc_enabled = 1;
+ 8000cc6:	4b18      	ldr	r3, [pc, #96]	@ (8000d28 <main+0x168>)
+ 8000cc8:	2201      	movs	r2, #1
+ 8000cca:	601a      	str	r2, [r3, #0]
+	DMA_C0CR_Set_Interrupts();
+	NVIC_DMA1_Enable_Interupt();
+	DMA_C0CR_Set_Enable();
+*/
+	//configure DMA
+	RCC_DMA1_Set_Clock();
+ 8000ccc:	f7ff fe6c 	bl	80009a8 <RCC_DMA1_Set_Clock>
+	DMA_SECCFGR_Set_Nonsecure();
+ 8000cd0:	f7ff fcc4 	bl	800065c <DMA_SECCFGR_Set_Nonsecure>
+	DMA_PRIVCFGR_Set_Unprivileged();
+ 8000cd4:	f7ff fcc9 	bl	800066a <DMA_PRIVCFGR_Set_Unprivileged>
+
+	//block size
+	DMA_C15BR1_BNDT();
+ 8000cd8:	f7ff fcce 	bl	8000678 <DMA_C15BR1_BNDT>
+	//DMA_C15BR1_BRC();
+	DMA_C15CR_PRIO_Channel_Priority_0();
+ 8000cdc:	f7ff fce3 	bl	80006a6 <DMA_C15CR_PRIO_Channel_Priority_0>
+	DMA_C15TR1_SAP_Port_0();
+ 8000ce0:	f7ff fcea 	bl	80006b8 <DMA_C15TR1_SAP_Port_0>
+	DMA_C15TR2_SWREQ_Software_Request_0();
+ 8000ce4:	f7ff fcf0 	bl	80006c8 <DMA_C15TR2_SWREQ_Software_Request_0>
+	//DMA_C15TR2_REQSEL_Hardware_Request_ADC4_DMA();
+	DMA_C15TR2_REQSEL_Hardware_Request_ADC1_DMA();
+ 8000ce8:	f7ff fd02 	bl	80006f0 <DMA_C15TR2_REQSEL_Hardware_Request_ADC1_DMA>
+	DMA_C15SAR_Source_Address();
+ 8000cec:	f7ff fd0c 	bl	8000708 <DMA_C15SAR_Source_Address>
+	DMA_C15TR1_SINC_Fixed();
+ 8000cf0:	f7ff fd0e 	bl	8000710 <DMA_C15TR1_SINC_Fixed>
+	//DMA_C15TR1_SINC_Continuous();
+	DMA_C15TR1_SDW_LOG2_Source_Data_Width_16();
+ 8000cf4:	f7ff fd1b 	bl	800072e <DMA_C15TR1_SDW_LOG2_Source_Data_Width_16>
+	DMA_C15TR1_SBL_1_Burst_Lenght_Single();
+ 8000cf8:	f7ff fd22 	bl	8000740 <DMA_C15TR1_SBL_1_Burst_Lenght_Single>
+	//DMA_C15TR1_SBL_1_Burst_Lenght_2();
+
+	DMA_C15TR1_DAP_Port_1();
+ 8000cfc:	f7ff fd39 	bl	8000772 <DMA_C15TR1_DAP_Port_1>
+	DMA_C15DAR_Destination_Address();
+ 8000d00:	f7ff fd3e 	bl	8000780 <DMA_C15DAR_Destination_Address>
+	//DMA_C15TR1_DINC_Fixed();
+	DMA_C15TR1_DINC_Continuous();
+ 8000d04:	f7ff fd48 	bl	8000798 <DMA_C15TR1_DINC_Continuous>
+	//DMA_C15TR1_DDW_LOG2_Source_Data_Width_32();
+	DMA_C15TR1_DDW_LOG2_Source_Data_Width_16();
+ 8000d08:	f7ff fd58 	bl	80007bc <DMA_C15TR1_DDW_LOG2_Source_Data_Width_16>
+	DMA_C15TR1_DBL_1_Burst_Lenght_Single();
+ 8000d0c:	f7ff fd61 	bl	80007d2 <DMA_C15TR1_DBL_1_Burst_Lenght_Single>
+	//DMA_C15TR1_DBL_1_Burst_Lenght_N();
+
+	DMA_C15CR_Set_Interrupts();
+ 8000d10:	f7ff fd7e 	bl	8000810 <DMA_C15CR_Set_Interrupts>
+	NVIC_DMA1_Enable_Interupt();
+ 8000d14:	f7ff fe1d 	bl	8000952 <NVIC_DMA1_Enable_Interupt>
+	DMA_C15CR_Set_Enable();
+ 8000d18:	f7ff fd74 	bl	8000804 <DMA_C15CR_Set_Enable>
+
+	for(;;);
+ 8000d1c:	bf00      	nop
+ 8000d1e:	e7fd      	b.n	8000d1c <main+0x15c>
+ 8000d20:	2000001c 	.word	0x2000001c
+ 8000d24:	2000009c 	.word	0x2000009c
+ 8000d28:	200000a0 	.word	0x200000a0
+
+08000d2c <ADC12_IRQHandler>:
+volatile uint32_t adc_interrupts_status;
+volatile float raw_value;
+volatile float temperature;
+volatile int conversion_flag = 0;
+
+void ADC12_IRQHandler(){
+ 8000d2c:	b580      	push	{r7, lr}
+ 8000d2e:	af00      	add	r7, sp, #0
+	adc_interrupts_status = ADC1_ISR_State();
+ 8000d30:	f7ff fc79 	bl	8000626 <ADC1_ISR_State>
+ 8000d34:	4603      	mov	r3, r0
+ 8000d36:	4a20      	ldr	r2, [pc, #128]	@ (8000db8 <ADC12_IRQHandler+0x8c>)
+ 8000d38:	6013      	str	r3, [r2, #0]
+
+	if(adc_interrupts_status & 0b100){ 	//end of conversion
+ 8000d3a:	4b1f      	ldr	r3, [pc, #124]	@ (8000db8 <ADC12_IRQHandler+0x8c>)
+ 8000d3c:	681b      	ldr	r3, [r3, #0]
+ 8000d3e:	f003 0304 	and.w	r3, r3, #4
+ 8000d42:	2b00      	cmp	r3, #0
+ 8000d44:	d011      	beq.n	8000d6a <ADC12_IRQHandler+0x3e>
+//		raw_value = ADC1_DR_Get();
+//		temperature = get_temp(raw_value);
+
+		conversion_flag ^=1;
+ 8000d46:	4b1d      	ldr	r3, [pc, #116]	@ (8000dbc <ADC12_IRQHandler+0x90>)
+ 8000d48:	681b      	ldr	r3, [r3, #0]
+ 8000d4a:	f083 0301 	eor.w	r3, r3, #1
+ 8000d4e:	4a1b      	ldr	r2, [pc, #108]	@ (8000dbc <ADC12_IRQHandler+0x90>)
+ 8000d50:	6013      	str	r3, [r2, #0]
+		if(conversion_flag){
+ 8000d52:	4b1a      	ldr	r3, [pc, #104]	@ (8000dbc <ADC12_IRQHandler+0x90>)
+ 8000d54:	681b      	ldr	r3, [r3, #0]
+ 8000d56:	2b00      	cmp	r3, #0
+ 8000d58:	d002      	beq.n	8000d60 <ADC12_IRQHandler+0x34>
+			GPIOH_Set_BSRR_LED_Green(); //to turn on
+ 8000d5a:	f7ff fdcc 	bl	80008f6 <GPIOH_Set_BSRR_LED_Green>
+ 8000d5e:	e001      	b.n	8000d64 <ADC12_IRQHandler+0x38>
+		}
+		else{
+			GPIOH_Clear_BSRR_LED_Green();	//to turn off
+ 8000d60:	f7ff fdd3 	bl	800090a <GPIOH_Clear_BSRR_LED_Green>
+		}
+		TIM8_Clear_UIF_Flag();
+ 8000d64:	f7ff fe88 	bl	8000a78 <TIM8_Clear_UIF_Flag>
+		return;
+ 8000d68:	e025      	b.n	8000db6 <ADC12_IRQHandler+0x8a>
+	}
+
+	if(adc_interrupts_status & 0b1000){ 	//end of sequence
+ 8000d6a:	4b13      	ldr	r3, [pc, #76]	@ (8000db8 <ADC12_IRQHandler+0x8c>)
+ 8000d6c:	681b      	ldr	r3, [r3, #0]
+ 8000d6e:	f003 0308 	and.w	r3, r3, #8
+ 8000d72:	2b00      	cmp	r3, #0
+ 8000d74:	d002      	beq.n	8000d7c <ADC12_IRQHandler+0x50>
+
+			TIM8_Clear_UIF_Flag();
+ 8000d76:	f7ff fe7f 	bl	8000a78 <TIM8_Clear_UIF_Flag>
+			return;
+ 8000d7a:	e01c      	b.n	8000db6 <ADC12_IRQHandler+0x8a>
+	}
+
+	if(adc_interrupts_status & 0b10000){ //overrun occurred
+ 8000d7c:	4b0e      	ldr	r3, [pc, #56]	@ (8000db8 <ADC12_IRQHandler+0x8c>)
+ 8000d7e:	681b      	ldr	r3, [r3, #0]
+ 8000d80:	f003 0310 	and.w	r3, r3, #16
+ 8000d84:	2b00      	cmp	r3, #0
+ 8000d86:	d002      	beq.n	8000d8e <ADC12_IRQHandler+0x62>
+		ADC1_ISR_OVR_Clear();
+ 8000d88:	f7ff fc53 	bl	8000632 <ADC1_ISR_OVR_Clear>
+		return;
+ 8000d8c:	e013      	b.n	8000db6 <ADC12_IRQHandler+0x8a>
+	}
+
+	if((adc_interrupts_status & 0b1)){ //0b1 ADC is ready
+ 8000d8e:	4b0a      	ldr	r3, [pc, #40]	@ (8000db8 <ADC12_IRQHandler+0x8c>)
+ 8000d90:	681b      	ldr	r3, [r3, #0]
+ 8000d92:	f003 0301 	and.w	r3, r3, #1
+ 8000d96:	2b00      	cmp	r3, #0
+ 8000d98:	d00d      	beq.n	8000db6 <ADC12_IRQHandler+0x8a>
+		if(adc_started == 0){
+ 8000d9a:	4b09      	ldr	r3, [pc, #36]	@ (8000dc0 <ADC12_IRQHandler+0x94>)
+ 8000d9c:	681b      	ldr	r3, [r3, #0]
+ 8000d9e:	2b00      	cmp	r3, #0
+ 8000da0:	d105      	bne.n	8000dae <ADC12_IRQHandler+0x82>
+			ADC1_IER_ADRDYIE_Clear();
+ 8000da2:	f7ff fc36 	bl	8000612 <ADC1_IER_ADRDYIE_Clear>
+			ADC1_CR_ADSTART();
+ 8000da6:	f7ff fbf3 	bl	8000590 <ADC1_CR_ADSTART>
+			TIM8_Set_CEN_Counter_Enable();
+ 8000daa:	f7ff fecd 	bl	8000b48 <TIM8_Set_CEN_Counter_Enable>
+
+		}
+		adc_started = 1;
+ 8000dae:	4b04      	ldr	r3, [pc, #16]	@ (8000dc0 <ADC12_IRQHandler+0x94>)
+ 8000db0:	2201      	movs	r2, #1
+ 8000db2:	601a      	str	r2, [r3, #0]
+		return;
+ 8000db4:	bf00      	nop
+	}
+}
+ 8000db6:	bd80      	pop	{r7, pc}
+ 8000db8:	200000a8 	.word	0x200000a8
+ 8000dbc:	200000ac 	.word	0x200000ac
+ 8000dc0:	200000a4 	.word	0x200000a4
+
+08000dc4 <TIM8_UP_IRQHandler>:
+
+volatile uint32_t status_flags;
+int tim_flag = 0;
+void TIM8_UP_IRQHandler(){
+ 8000dc4:	b580      	push	{r7, lr}
+ 8000dc6:	af00      	add	r7, sp, #0
+	status_flags = TIM8_Get_SR_Status();
+ 8000dc8:	f7ff fee8 	bl	8000b9c <TIM8_Get_SR_Status>
+ 8000dcc:	4603      	mov	r3, r0
+ 8000dce:	461a      	mov	r2, r3
+ 8000dd0:	4b08      	ldr	r3, [pc, #32]	@ (8000df4 <TIM8_UP_IRQHandler+0x30>)
+ 8000dd2:	601a      	str	r2, [r3, #0]
+	if(status_flags & 0x1){  //UIF on
+ 8000dd4:	4b07      	ldr	r3, [pc, #28]	@ (8000df4 <TIM8_UP_IRQHandler+0x30>)
+ 8000dd6:	681b      	ldr	r3, [r3, #0]
+ 8000dd8:	f003 0301 	and.w	r3, r3, #1
+ 8000ddc:	2b00      	cmp	r3, #0
+ 8000dde:	d007      	beq.n	8000df0 <TIM8_UP_IRQHandler+0x2c>
+		TIM8_Clear_UIF_Flag();
+ 8000de0:	f7ff fe4a 	bl	8000a78 <TIM8_Clear_UIF_Flag>
+		tim_flag ^= 1;
+ 8000de4:	4b04      	ldr	r3, [pc, #16]	@ (8000df8 <TIM8_UP_IRQHandler+0x34>)
+ 8000de6:	681b      	ldr	r3, [r3, #0]
+ 8000de8:	f083 0301 	eor.w	r3, r3, #1
+ 8000dec:	4a02      	ldr	r2, [pc, #8]	@ (8000df8 <TIM8_UP_IRQHandler+0x34>)
+ 8000dee:	6013      	str	r3, [r2, #0]
+	}
+}
+ 8000df0:	bf00      	nop
+ 8000df2:	bd80      	pop	{r7, pc}
+ 8000df4:	200000b0 	.word	0x200000b0
+ 8000df8:	200000b4 	.word	0x200000b4
+
+08000dfc <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000dfc:	480d      	ldr	r0, [pc, #52]	@ (8000e34 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 8000dfe:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 8000e00:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8000e04:	480c      	ldr	r0, [pc, #48]	@ (8000e38 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8000e06:	490d      	ldr	r1, [pc, #52]	@ (8000e3c <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000e08:	4a0d      	ldr	r2, [pc, #52]	@ (8000e40 <LoopForever+0xe>)
+  movs r3, #0
+ 8000e0a:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8000e0c:	e002      	b.n	8000e14 <LoopCopyDataInit>
+
+08000e0e <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 8000e0e:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 8000e10:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 8000e12:	3304      	adds	r3, #4
+
+08000e14 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8000e14:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8000e16:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000e18:	d3f9      	bcc.n	8000e0e <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8000e1a:	4a0a      	ldr	r2, [pc, #40]	@ (8000e44 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000e1c:	4c0a      	ldr	r4, [pc, #40]	@ (8000e48 <LoopForever+0x16>)
+  movs r3, #0
+ 8000e1e:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8000e20:	e001      	b.n	8000e26 <LoopFillZerobss>
+
+08000e22 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8000e22:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000e24:	3204      	adds	r2, #4
+
+08000e26 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8000e26:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000e28:	d3fb      	bcc.n	8000e22 <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8000e2a:	f000 f811 	bl	8000e50 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 8000e2e:	f7ff fec7 	bl	8000bc0 <main>
+
+08000e32 <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 8000e32:	e7fe      	b.n	8000e32 <LoopForever>
+  ldr   r0, =_estack
+ 8000e34:	200c0000 	.word	0x200c0000
+  ldr r0, =_sdata
+ 8000e38:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8000e3c:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 8000e40:	08000eb8 	.word	0x08000eb8
+  ldr r2, =_sbss
+ 8000e44:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 8000e48:	200000b8 	.word	0x200000b8
+
+08000e4c <ADC4_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8000e4c:	e7fe      	b.n	8000e4c <ADC4_IRQHandler>
+	...
+
+08000e50 <__libc_init_array>:
+ 8000e50:	b570      	push	{r4, r5, r6, lr}
+ 8000e52:	4d0d      	ldr	r5, [pc, #52]	@ (8000e88 <__libc_init_array+0x38>)
+ 8000e54:	2600      	movs	r6, #0
+ 8000e56:	4c0d      	ldr	r4, [pc, #52]	@ (8000e8c <__libc_init_array+0x3c>)
+ 8000e58:	1b64      	subs	r4, r4, r5
+ 8000e5a:	10a4      	asrs	r4, r4, #2
+ 8000e5c:	42a6      	cmp	r6, r4
+ 8000e5e:	d109      	bne.n	8000e74 <__libc_init_array+0x24>
+ 8000e60:	4d0b      	ldr	r5, [pc, #44]	@ (8000e90 <__libc_init_array+0x40>)
+ 8000e62:	2600      	movs	r6, #0
+ 8000e64:	4c0b      	ldr	r4, [pc, #44]	@ (8000e94 <__libc_init_array+0x44>)
+ 8000e66:	f000 f817 	bl	8000e98 <_init>
+ 8000e6a:	1b64      	subs	r4, r4, r5
+ 8000e6c:	10a4      	asrs	r4, r4, #2
+ 8000e6e:	42a6      	cmp	r6, r4
+ 8000e70:	d105      	bne.n	8000e7e <__libc_init_array+0x2e>
+ 8000e72:	bd70      	pop	{r4, r5, r6, pc}
+ 8000e74:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000e78:	3601      	adds	r6, #1
+ 8000e7a:	4798      	blx	r3
+ 8000e7c:	e7ee      	b.n	8000e5c <__libc_init_array+0xc>
+ 8000e7e:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000e82:	3601      	adds	r6, #1
+ 8000e84:	4798      	blx	r3
+ 8000e86:	e7f2      	b.n	8000e6e <__libc_init_array+0x1e>
+ 8000e88:	08000eb0 	.word	0x08000eb0
+ 8000e8c:	08000eb0 	.word	0x08000eb0
+ 8000e90:	08000eb0 	.word	0x08000eb0
+ 8000e94:	08000eb4 	.word	0x08000eb4
+
+08000e98 <_init>:
+ 8000e98:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000e9a:	bf00      	nop
+ 8000e9c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000e9e:	bc08      	pop	{r3}
+ 8000ea0:	469e      	mov	lr, r3
+ 8000ea2:	4770      	bx	lr
+
+08000ea4 <_fini>:
+ 8000ea4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000ea6:	bf00      	nop
+ 8000ea8:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000eaa:	bc08      	pop	{r3}
+ 8000eac:	469e      	mov	lr, r3
+ 8000eae:	4770      	bx	lr
