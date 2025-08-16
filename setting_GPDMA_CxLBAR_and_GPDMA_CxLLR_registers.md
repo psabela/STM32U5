@@ -1,7 +1,7 @@
 ## Example of creating link list in code and setting GPDMA_CxLBAR and GPDMA_CxLLR registers (explained).
 by Peter Sabela
 
-*Dilemna introduced by STM32U series documentation:*  
+*Dilemma introduced by STM32U series documentation:*  
 My linked-list object's base address in memory is 0x200bffa8.   How can I save this address in GPDMA_CxLBAR register (that holds *"the linked-list base address of the memory region, for a given channel x, from which the LLIs describing the programmed sequence of the GPDMA transfers, are conditionally and automatically updated"*)  when GPDMA_CxLBAR designated region for the address (LBA[31:16]) is only 16 bits long?
 
 *What is linked list and its aim, per STMicroelectronics?:*  
