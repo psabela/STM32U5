@@ -51,7 +51,9 @@ f      |f      |a      |8
 ```c
 //Bits 15:2 LA[15:2]: pointer (16-bit low-significant address) to the next linked-list data structure
 pNode0->CLLR_register.LA = 0x3fea;
-pNode0->CLLR_register    = 0xfe01ffa8;  //the last 4 hex values aggree to the last 4 hex of the address 
+pNode0->CLLR_register    = 0xfe01ffa8;
+//the last 4 hex values aggree to the last 4 hex of the address,
+//the first 4 hex values relate to other settings.
 ```
 The address of node2 is 0x200b**ffc8**.  The node 1 points to node 2.  
 f      |f      |c      |8     
@@ -61,10 +63,14 @@ f      |f      |c      |8
 ```c
 //Bits 15:2 LA[15:2]: pointer (16-bit low-significant address) to the next linked-list data structure
 pNode1->CLLR_register.LA = 0x3ff2;
-pNode1->CLLR_register    = 0xfe01ffc8;  //the last 4 hex values aggree to the last 4 hex of the address
+pNode1->CLLR_register    = 0xfe01ffc8;
+//the last 4 hex values aggree to the last 4 hex of the address,
+//the first 4 hex values relate to other settings.
 
 The node 2 points back to node 1. (The address of node1 is 0x200bffa8.)  
 //Bits 15:2 LA[15:2]: pointer (16-bit low-significant address) to the next linked-list data structure
 pNode2->CLLR_register.LA = 0x3fea;
-pNode2->CLLR_register    = 0xfe01ffa8;  //the last 4 hex values aggree to the last 4 hex of the address
+pNode2->CLLR_register    = 0xfe01ffa8;
+//the last 4 hex values aggree to the last 4 hex of the address,
+//the first 4 hex values relate to other settings.
 ```
